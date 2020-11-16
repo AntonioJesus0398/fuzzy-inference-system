@@ -1,7 +1,7 @@
-from classes import MembershipDegree
+from classes import MembershipValue
 
 def membership_function(f, args, kwargs):
-    return MembershipDegree(f(*args, **kwargs))
+    return MembershipValue(f(*args, **kwargs))
 
 def triangular(a1, a2, a3):
     @membership_function

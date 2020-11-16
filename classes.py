@@ -13,16 +13,24 @@ class FuzzySet:
         self.name = name
         self.membership_function = membership_function
 
-class MembershipDegree:
+class MembershipValue:
 
     def __init__(self, value):
         self.value = value
 
     def __and__(self, other):
-        return MembershipDegree(min(self.value, other.value))
+        return MembershipValue(min(self.value, other.value))
 
     def __or__(self, other):
-        return MembershipDegree(max(self.value, other.value))
+        return MembershipValue(max(self.value, other.value))
 
     def __repr__(self):
         return str(self.value)
+
+class FuzzyRule:
+
+    # if x is Ai and y is Bi then z is Ci
+    # A, B and C are Linguistic Variables. Ai, Bi, Ci are terms of A, B, C
+    def __init__(self, antecedent, consecuence):
+        self.antecedent = antecedent
+        self.consecuence = consecuence
