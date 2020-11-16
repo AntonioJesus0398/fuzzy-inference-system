@@ -34,3 +34,29 @@ def center_of_area(A, step, interval):
         x += step
 
     return sum1 / sum2
+
+def mean_of_maximum(A, step, interval):
+    f = A.membership_function
+    left, right = interval
+    x = left
+    maximum = f(x).value
+
+    while x <= right:
+        maximum = max(f(x).value, maximum)
+        x += step
+    if x < step:
+        maximum = max(f(right).value, maximum)
+
+    k = 0
+    _sum = 0
+    x = left
+    while x <= right:
+        if f(x).value == maximum:
+            _sum += x
+            k += 1
+        x += step
+    if x < right and f(right) == maximum:
+        _sum += right
+        k += 1
+
+    return _sum / k
