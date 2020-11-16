@@ -21,3 +21,16 @@ def bisector_of_area(A, step, interval):
         x += step
 
     return x - step
+
+def center_of_area(A, step, interval):
+    f = A.membership_function
+    left, right = interval
+    x = left
+    sum1, sum2 = 0, 0
+
+    while x <= right:
+        sum1 += x * f(x).value
+        sum2 += f(x).value
+        x += step
+
+    return sum1 / sum2
