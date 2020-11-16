@@ -13,6 +13,7 @@ class FuzzySet:
         self.name = name
         self.membership_function = membership_function
 
+
 class MembershipValue:
 
     def __init__(self, value):
@@ -23,6 +24,9 @@ class MembershipValue:
 
     def __or__(self, other):
         return MembershipValue(max(self.value, other.value))
+
+    def __mult__(self, other):
+        return MembershipValue(self.value * other.value)
 
     def __repr__(self):
         return str(self.value)
