@@ -37,4 +37,4 @@ class FuzzyRule:
     # A, B and C are Linguistic Variables. Ai, Bi, Ci are terms of A, B, C
     def __init__(self, antecedent, consecuence):
         self.antecedent = antecedent
-        self.consecuence = consecuence
+        self.consequence = consecuence

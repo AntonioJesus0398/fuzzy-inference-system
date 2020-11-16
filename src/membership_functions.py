@@ -1,7 +1,9 @@
-from classes import MembershipValue
+from src.classes import MembershipValue
 
-def membership_function(f, args, kwargs):
-    return MembershipValue(f(*args, **kwargs))
+def membership_function(f):
+    def func(*args):
+        return MembershipValue(f(*args))
+    return func
 
 def triangular(a1, a2, a3):
     @membership_function
@@ -24,3 +26,6 @@ def trapezoidal(a1, a2, a3, a4):
             return (a4 - x) / (a4 - a3)
         return 0
     return f
+
+
+triangular(2, 3, 4)

@@ -1,4 +1,4 @@
-from classes import MembershipValue, FuzzySet, FuzzyRule, LinguisticVariable
+from src.classes import MembershipValue, FuzzySet, FuzzyRule, LinguisticVariable
 
 def mamdani(input_value, rules):
     u, v = input_value

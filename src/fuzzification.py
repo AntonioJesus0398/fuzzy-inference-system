@@ -1,4 +1,4 @@
-from classes import INF
+from src.classes import INF
 
 # levels: A list of tuples (min, max, value) which maps the input to value if it belongs to [min, max)
 def discretize_and_normalize(levels, input_value):
