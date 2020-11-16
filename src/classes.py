@@ -1,18 +1,15 @@
-INF = 1000000000000
-
-class LinguisticVariable:
-    # terms: a list of fuzzy sets
-    def __init__(self, name, domain, terms):
-        self.name = name
-        self.domain = domain
-        self.terms = terms
+INF = 1000
 
 class FuzzySet:
 
-    def __init__(self, name, membership_function):
-        self.name = name
+    def __init__(self, membership_function):
         self.membership_function = membership_function
 
+class LinguisticVariable:
+    # terms: a list of fuzzy sets
+    def __init__(self, name, terms: {str: FuzzySet}):
+        self.name = name
+        self.terms = terms
 
 class MembershipValue:
 
@@ -33,8 +30,20 @@ class MembershipValue:
 
 class FuzzyRule:
 
-    # if x is Ai and y is Bi then z is Ci
-    # A, B and C are Linguistic Variables. Ai, Bi, Ci are terms of A, B, C
-    def __init__(self, antecedent, consecuence):
+    # if x1 is A1 and x2 is A2 and ... and xn is An then y1 is B1 and 2y is B2 and ... ym is Bm
+    def __init__(self, antecedent: [LinguisticVariable, str], consequence: [LinguisticVariable, str]):
         self.antecedent = antecedent
-        self.consequence = consecuence
+        self.consequence = consequence
+
+    def __repr__(self):
+        premise = [f' {lv.name} is {term} ' for lv, term in self.antecedent]
+        conclusion = [f' {lv.name} is {term} ' for lv, term in self.consequence]
+        return 'If' + 'and'.join(premise) + 'then' + 'and'.join(conclusion)
+
+class FuzzyRuleBase:
+    def __init__(self):
+        self.rules = []
+
+    def add_rule(self, rule: FuzzyRule):
+        for term in rule.consequence:
+            self.rules.append(FuzzyRule([rule.antecedent], [term]))
