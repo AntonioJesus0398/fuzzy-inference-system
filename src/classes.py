@@ -25,7 +25,7 @@ class MembershipValue:
     def __or__(self, other):
         return MembershipValue(max(self.value, other.value))
 
-    def __mult__(self, other):
+    def __mul__(self, other):
         return MembershipValue(self.value * other.value)
 
     def __repr__(self):
