@@ -1,11 +1,12 @@
 class LinguisticVariable:
 
-    def __init__(self, name, levels, terms):
+    def __init__(self, name, domain, terms):
         self.name = name
-        self.levels = levels
+        self.domain = domain
         self.terms = terms
 
 class FuzzySet:
 
-    def __init__(self, membership_function):
+    def __init__(self, name, membership_function):
+        self.name = name
         self.membership_function = membership_function
