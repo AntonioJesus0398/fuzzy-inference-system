@@ -1,3 +1,5 @@
+INF = 1000000000000
+
 class LinguisticVariable:
 
     def __init__(self, name, domain, terms):
