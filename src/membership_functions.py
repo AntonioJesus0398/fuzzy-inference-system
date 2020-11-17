@@ -26,6 +26,3 @@ def trapezoidal(a1, a2, a3, a4):
             return (a4 - x) / (a4 - a3)
         return 0
     return f
-
-
-triangular(2, 3, 4)

@@ -11,6 +11,9 @@ class LinguisticVariable:
         self.name = name
         self.terms = terms
 
+    def __eq__(self, other):
+        return self.name == other.name
+
 class MembershipValue:
 
     def __init__(self, value):
@@ -42,8 +45,14 @@ class FuzzyRule:
 
 class FuzzyRuleBase:
     def __init__(self):
-        self.rules = []
+        self.rules = {}
+
+    def __iter__(self):
+        return iter(self.rules)
 
     def add_rule(self, rule: FuzzyRule):
         for term in rule.consequence:
-            self.rules.append(FuzzyRule([rule.antecedent], [term]))
+            try:
+                self.rules[term[0].name].append(FuzzyRule(rule.antecedent, [term]))
+            except KeyError:
+                self.rules[term[0].name] = [FuzzyRule(rule.antecedent, [term])]
