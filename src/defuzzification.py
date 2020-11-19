@@ -9,9 +9,9 @@ def integrate(func, step, interval):
         integral += (right - x) * (func(x).value + func(right).value) / 2
     return integral
 
-def bisector_of_area(A, step, interval):
+def bisector_of_area(A, step):
     f = A.membership_function
-    total_area = integrate(f, step, interval)
+    total_area = integrate(f, step, A.domain)
     x = 0
     acc_area = 0
     mid_area = total_area / 2
@@ -22,9 +22,9 @@ def bisector_of_area(A, step, interval):
 
     return x - step
 
-def center_of_area(A, step, interval):
+def center_of_area(A, step):
     f = A.membership_function
-    left, right = interval
+    left, right = A.domain
     x = left
     sum1, sum2 = 0, 0
 
@@ -35,9 +35,9 @@ def center_of_area(A, step, interval):
 
     return sum1 / sum2
 
-def mean_of_maximum(A, step, interval):
+def mean_of_maximum(A, step):
     f = A.membership_function
-    left, right = interval
+    left, right = A.domain
     x = left
     maximum = f(x).value
 
