@@ -1,8 +1,11 @@
 from src.classes import MembershipValue, FuzzySet, FuzzyRule, FuzzyRuleBase, LinguisticVariable
+from src.fuzzification import scale_function
 
-def aggregate(input_value, rule_base: FuzzyRuleBase, method="Mamdani", step=0.01):
+def aggregate(input_value, rule_base: FuzzyRuleBase, method="Mamdani", step=0.01, scaling_function=lambda v: v):
     if method not in ["Mamdani", "Larsen"]:
         raise ValueError("Invalid aggregation method")
+    for fz in input_value:
+        fz.membership_function = scale_function(fz.membership_function, scaling_func=scaling_function)
     rules = rule_base.rules
     results = {}
     for control_variable in rules:
