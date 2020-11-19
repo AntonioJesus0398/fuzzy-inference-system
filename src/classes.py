@@ -2,14 +2,19 @@ INF = 1000
 
 class FuzzySet:
 
-    def __init__(self, membership_function):
+    def __init__(self, membership_function, domain):
+        self.domain = domain
         self.membership_function = membership_function
 
 class LinguisticVariable:
     # terms: a list of fuzzy sets
-    def __init__(self, name, terms: {str: FuzzySet}):
+    def __init__(self, name, domain):
         self.name = name
-        self.terms = terms
+        self.domain = domain
+        self.terms = {}
+
+    def add_term(self, name, func):
+        self.terms[name] = FuzzySet(func, domain=self.domain)
 
     def __eq__(self, other):
         return self.name == other.name
@@ -44,8 +49,10 @@ class FuzzyRule:
         return 'If' + 'and'.join(premise) + 'then' + 'and'.join(conclusion)
 
 class FuzzyRuleBase:
-    def __init__(self):
+    def __init__(self, state_variables, control_variables):
         self.rules = {}
+        self.state_variables = {sv.name: sv for sv in state_variables}
+        self.control_variables = {cv.name: cv for cv in control_variables}
 
     def __iter__(self):
         return iter(self.rules)
