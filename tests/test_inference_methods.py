@@ -22,10 +22,8 @@ C.add_term('C1', C1)
 C.add_term('C2', C2)
 
 RB = FuzzyRuleBase((A, B), (C,))
-R1 = FuzzyRule(antecedent=[(A, 'A1'), (B, 'B1')], consequence=[(C, 'C1')])
-R2 = FuzzyRule(antecedent=[(A, 'A2'), (B, 'B2')], consequence=[(C, 'C2')])
-RB.add_rule(R1)
-RB.add_rule(R2)
+RB.add_rule([('A', 'A1'), ('B', 'B1')], [('C', 'C1')])
+RB.add_rule([('A', 'A2'), ('B', 'B2')], [('C', 'C2')])
 
 A_ = FuzzySet(triangular(0.5, 1, 1.5), domain=(0.5, 3))
 B_ = FuzzySet(triangular(0.1, 1, 2), domain=(0, 4))

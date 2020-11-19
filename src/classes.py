@@ -1,4 +1,4 @@
-from fuzzification import scale_function
+from src.fuzzification import scale_function
 
 class FuzzySet:
 
@@ -8,7 +8,7 @@ class FuzzySet:
 
 class LinguisticVariable:
     # terms: a list of fuzzy sets
-    def __init__(self, name, domain, scaling_function):
+    def __init__(self, name, domain, scaling_function=lambda v: v):
         self.name = name
         self.domain = domain
         self.scaling_function = scaling_function
@@ -58,9 +58,11 @@ class FuzzyRuleBase:
     def __iter__(self):
         return iter(self.rules)
 
-    def add_rule(self, rule: FuzzyRule):
-        for term in rule.consequence:
+    def add_rule(self, _antecedent, _consequence):
+        antecedent = [(self.state_variables[variable_name], term_name) for variable_name, term_name in _antecedent]
+        consequence = [(self.control_variables[variable_name], term_name) for variable_name, term_name in _consequence]
+        for variable, term_name in consequence:
             try:
-                self.rules[term[0].name].append(FuzzyRule(rule.antecedent, [term]))
+                self.rules[variable.name].append(FuzzyRule(antecedent, [(variable, term_name)]))
             except KeyError:
-                self.rules[term[0].name] = [FuzzyRule(rule.antecedent, [term])]
+                self.rules[variable.name] = [FuzzyRule(antecedent, [(variable, term_name)])]
