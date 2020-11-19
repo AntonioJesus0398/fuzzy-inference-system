@@ -1,4 +1,4 @@
-INF = 1000
+from fuzzification import scale_function
 
 class FuzzySet:
 
@@ -8,13 +8,14 @@ class FuzzySet:
 
 class LinguisticVariable:
     # terms: a list of fuzzy sets
-    def __init__(self, name, domain):
+    def __init__(self, name, domain, scaling_function):
         self.name = name
         self.domain = domain
+        self.scaling_function = scaling_function
         self.terms = {}
 
     def add_term(self, name, func):
-        self.terms[name] = FuzzySet(func, domain=self.domain)
+        self.terms[name] = FuzzySet(membership_function=scale_function(func, self.scaling_function), domain=self.domain)
 
     def __eq__(self, other):
         return self.name == other.name
