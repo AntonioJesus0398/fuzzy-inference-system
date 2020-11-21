@@ -1,5 +1,20 @@
-# from src.classes import MembershipValue
-from classes import MembershipValue
+class MembershipValue:
+
+    def __init__(self, value):
+        self.value = value
+
+    def __and__(self, other):
+        return MembershipValue(min(self.value, other.value))
+
+    def __or__(self, other):
+        return MembershipValue(max(self.value, other.value))
+
+    def __mul__(self, other):
+        return MembershipValue(self.value * other.value)
+
+    def __repr__(self):
+        return str(self.value)
+
 
 def membership_function(f):
     def func(*args):

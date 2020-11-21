@@ -1,5 +1,4 @@
-# from src.fuzzification import scale_function
-
+from membership_functions import triangular, trapezoidal, singleton
 
 class FuzzySet:
 
@@ -17,35 +16,22 @@ class LinguisticVariable:
         self.step_size = (scaling_function(domain[1]) - scaling_function(domain[0])) / no_levels
         self.terms = {}
 
-    def add_term(self, name, func, args):
-        scaled_args = tuple(self.scaling_function(arg) for arg in args)
-        kwargs = {'step': self.step_size}
-        self.terms[name] = FuzzySet(membership_function=func(*scaled_args, **kwargs), domain=self.domain)
+    def build_singleton(self, v):
+        return FuzzySet(membership_function=singleton(self.scaling_function(v), step=self.step_size), domain=self.domain)
 
-    def build_set(self, func, args):
-        scaled_args = tuple(self.scaling_function(arg) for arg in args)
-        kwargs = {'step': self.step_size}
-        return FuzzySet(membership_function=func(*scaled_args, **kwargs), domain=self.domain)
+    def build_triangular(self, a1, a2, a3):
+        return FuzzySet(membership_function=triangular(self.scaling_function(a1), self.scaling_function(a2), self.scaling_function(a3)), domain=self.domain)
+
+    def build_trapezoidal(self, a1, a2, a3, a4):
+        return FuzzySet(membership_function=trapezoidal(self.scaling_function(a1), self.scaling_function(a2), self.scaling_function(a3), self.scaling_function(a4)), domain=self.domain)
+
+    def add_term(self, name, fz):
+        self.terms[name] = fz
 
     def __eq__(self, other):
         return self.name == other.name
 
-class MembershipValue:
 
-    def __init__(self, value):
-        self.value = value
-
-    def __and__(self, other):
-        return MembershipValue(min(self.value, other.value))
-
-    def __or__(self, other):
-        return MembershipValue(max(self.value, other.value))
-
-    def __mul__(self, other):
-        return MembershipValue(self.value * other.value)
-
-    def __repr__(self):
-        return str(self.value)
 
 class FuzzyRule:
 

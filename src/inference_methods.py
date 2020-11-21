@@ -1,7 +1,8 @@
 # from src.classes import MembershipValue, FuzzySet, FuzzyRule, FuzzyRuleBase, LinguisticVariable
 # from src.fuzzification import scale_function
 
-from classes import MembershipValue, FuzzySet, FuzzyRule, FuzzyRuleBase, LinguisticVariable
+from classes import FuzzySet, FuzzyRule, FuzzyRuleBase, LinguisticVariable
+from membership_functions import MembershipValue
 
 def aggregate(input_value, rule_base: FuzzyRuleBase, method="Mamdani"):
     if method not in ["Mamdani", "Larsen"]:
