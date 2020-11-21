@@ -1,11 +1,12 @@
-from src.classes import MembershipValue
+# from src.classes import MembershipValue
+from classes import MembershipValue
 
 def membership_function(f):
     def func(*args):
         return MembershipValue(f(*args))
     return func
 
-def triangular(a1, a2, a3):
+def triangular(a1, a2, a3, step=0.001):
     @membership_function
     def f(x):
         if x >= a1 and x <= a2:
@@ -15,7 +16,7 @@ def triangular(a1, a2, a3):
         return 0
     return f
 
-def trapezoidal(a1, a2, a3, a4):
+def trapezoidal(a1, a2, a3, a4, step=0.001):
     @membership_function
     def f(x):
         if x >= a1 and x <= a2:
@@ -27,10 +28,10 @@ def trapezoidal(a1, a2, a3, a4):
         return 0
     return f
 
-def singleton(value):
+def singleton(value, step=0.001):
     @membership_function
     def f(x):
-        if x == value:
+        if x >= value - step / 2 and x <= value + step / 2:
             return 1
         return 0
     return f

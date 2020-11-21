@@ -1,4 +1,5 @@
-from src.fuzzification import scale_function
+# from src.fuzzification import scale_function
+
 
 class FuzzySet:
 
@@ -8,14 +9,26 @@ class FuzzySet:
 
 class LinguisticVariable:
     # terms: a list of fuzzy sets
-    def __init__(self, name, domain, scaling_function=lambda v: v):
+    def __init__(self, name, domain, scaling_function=lambda v: v, unscaling_function=lambda v: v, no_levels=1000):
         self.name = name
-        self.domain = domain
+        self.domain = scaling_function(domain[0]), scaling_function(domain[1])
         self.scaling_function = scaling_function
+        self.unscaling_function = unscaling_function
+        self.no_levels = no_levels
+        self.step_size = (scaling_function(domain[1]) - scaling_function(domain[0])) / no_levels
         self.terms = {}
 
-    def add_term(self, name, func):
-        self.terms[name] = FuzzySet(membership_function=scale_function(func, self.scaling_function), domain=self.domain)
+        # print(f"Creating linguistic variable: {name}\ndomain: {self.domain}\nstep: {self.step_size}")
+
+    def add_term(self, name, func, args):
+        scaled_args = tuple(self.scaling_function(arg) for arg in args)
+        kwargs = {'step': self.step_size}
+        self.terms[name] = FuzzySet(membership_function=func(*scaled_args, **kwargs), domain=self.domain)
+
+    def build_set(self, func, args):
+        scaled_args = tuple(self.scaling_function(arg) for arg in args)
+        kwargs = {'step': self.step_size}
+        return FuzzySet(membership_function=func(*scaled_args, **kwargs), domain=self.domain)
 
     def __eq__(self, other):
         return self.name == other.name

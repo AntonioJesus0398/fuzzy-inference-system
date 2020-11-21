@@ -1,36 +1,40 @@
-from src.classes import MembershipValue, FuzzySet, FuzzyRule, FuzzyRuleBase, LinguisticVariable
-from src.fuzzification import scale_function
+# from src.classes import MembershipValue, FuzzySet, FuzzyRule, FuzzyRuleBase, LinguisticVariable
+# from src.fuzzification import scale_function
 
-def aggregate(input_value, rule_base: FuzzyRuleBase, method="Mamdani", step=0.01, scaling_function=lambda v: v):
+from classes import MembershipValue, FuzzySet, FuzzyRule, FuzzyRuleBase, LinguisticVariable
+
+def aggregate(input_value, rule_base: FuzzyRuleBase, method="Mamdani"):
     if method not in ["Mamdani", "Larsen"]:
         raise ValueError("Invalid aggregation method")
-    for fz in input_value:
-        fz.membership_function = scale_function(fz.membership_function, scaling_func=scaling_function)
     rules = rule_base.rules
     results = {}
     for control_variable in rules:
         def f(w):
             result = MembershipValue(0)
             for r in rules[control_variable]:
-                matching_degree = get_matching_degree(zip(input_value, [variable.terms[term_name] for variable, term_name in r.antecedent]), step)
+                matching_degree = get_matching_degree(zip(input_value, [variable.terms[term_name] for variable, term_name in r.antecedent]), rule_base)
                 variable, term_name = r.consequence[0]
                 if method == "Mamdani":
                     result |= (matching_degree & variable.terms[term_name].membership_function(w))
                 else:
                     result |= (matching_degree * variable.terms[term_name].membership_function(w))
             return result
-        results[control_variable] = FuzzySet(f, domain=rule_base.control_variables[control_variable].domain)
+        results[control_variable] = FuzzySet(membership_function=lambda x: f(x), domain=rule_base.control_variables[control_variable].domain)
     return results
 
-def get_matching_degree(fuzzy_sets, step):
+def get_matching_degree(fuzzy_sets, rule_base):
     matching_degree = MembershipValue(1)
     for fuzzy_sets_pair in fuzzy_sets:
-        A, B = fuzzy_sets_pair
-        left, right = min(A.domain[0], B.domain[0]), max(A.domain[1], B.domain[1])
+        (variable_name, A), B = fuzzy_sets_pair
+        variable = rule_base.state_variables[variable_name]
+        left, right = variable.domain
         x = left
         _max = MembershipValue(0)
         while x <= right:
-            _max |= A.membership_function(x) & B.membership_function(x)
-            x += step
+            a = A.membership_function(x)
+            b = B.membership_function(x)
+            # print(variable_name, x, A.membership_function(x).value, B.membership_function(x).value)
+            _max |= (A.membership_function(x) & B.membership_function(x))
+            x += variable.step_size
         matching_degree &= _max
     return matching_degree
