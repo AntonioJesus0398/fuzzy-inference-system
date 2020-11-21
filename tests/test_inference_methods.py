@@ -3,40 +3,56 @@ from src.inference_methods import aggregate
 from src.membership_functions import triangular, trapezoidal, singleton
 from src.classes import FuzzySet, FuzzyRule, FuzzyRuleBase, LinguisticVariable
 
-A = LinguisticVariable('A', (0.5, 3))
-A1 = triangular(0.5, 1, 2)
-A2 = triangular(1, 1.2, 3)
-A.add_term('A1', A1)
-A.add_term('A2', A2)
+A = LinguisticVariable('A', domain=(0, 1), no_levels=1000)
+A.add_term('A1', A.build_triangular(0, 0.5, 1))
+A.add_term('A2', A.build_singleton(0.35))
 
-B = LinguisticVariable('B', (0, 4))
-B1 = triangular(1, 2, 4)
-B2 = triangular(0, 2.2, 3)
-B.add_term('B1', B1)
-B.add_term('B2', B2)
+B = LinguisticVariable('B', domain=(0, 1), no_levels=1000)
+B.add_term('B1', B.build_triangular(0.2, 0.4, 0.9))
+B.add_term('B2', B.build_triangular(0.1, 0.3, 0.6))
 
-C = LinguisticVariable('C', domain=(0.5, 4))
-C1 = triangular(0.5, 3, 4)
-C2 = triangular(1, 2, 3)
-C.add_term('C1', C1)
-C.add_term('C2', C2)
+C = LinguisticVariable('C', domain=(0, 1), no_levels=1000)
+C.add_term('C1', B.build_trapezoidal(0.1, 0.2, 0.5, 1))
+C.add_term('C2', B.build_triangular(0, 0.2, 0.4))
 
 RB = FuzzyRuleBase((A, B), (C,))
 RB.add_rule([('A', 'A1'), ('B', 'B1')], [('C', 'C1')])
 RB.add_rule([('A', 'A2'), ('B', 'B2')], [('C', 'C2')])
 
-A_ = FuzzySet(triangular(0.5, 1, 1.5), domain=(0.5, 3))
-B_ = FuzzySet(triangular(0.1, 1, 2), domain=(0, 4))
 
 class InferenceMethodsTestCase(unittest.TestCase):
-    def test_mamdani(self):
-        result = aggregate((A_, B_), RB, step=0.001)
-        self.assertAlmostEqual(result['C'].membership_function(2.5).value, 0.5, 2)
-        self.assertAlmostEqual(result['C'].membership_function(3.1).value, 0.5, 2)
-    
-    def test_larsen(self):
-        result = aggregate((A_, B_), RB, method="Larsen", step=0.001)
-        self.assertAlmostEqual(result['C'].membership_function(2.5).value, 0.4, 2)
-        self.assertAlmostEqual(result['C'].membership_function(3.1).value, 0.45, 2)
+    def test_mamdani_singleton_input(self):
+        _input = [('A', A.build_singleton(0.3)), ('B', B.build_singleton(0.8))]
+        result = aggregate(_input, RB)
+        f = result['C'].membership_function
+        self.assertAlmostEqual(f(0.1).value, 0, 1)
+        self.assertAlmostEqual(f(0.2).value, 0.2, 1)
+        self.assertAlmostEqual(f(0.21).value, 0.2, 1)
+        self.assertAlmostEqual(f(1).value, 0, 1)
+        self.assertAlmostEqual(f(0.15).value, 0.2, 1)
+        self.assertAlmostEqual(f(0.95).value, 0.1, 1)
 
+    def test_larsen_singleton_input(self):
+        _input = [('A', A.build_singleton(0.3)), ('B', B.build_singleton(0.8))]
+        result = aggregate(_input, RB, method="Larsen")
+        f = result['C'].membership_function
+        self.assertAlmostEqual(f(0.1).value, 0, 1)
+        self.assertAlmostEqual(f(0.2).value, 0.2, 1)
+        self.assertAlmostEqual(f(0.21).value, 0.2, 1)
+        self.assertAlmostEqual(f(1).value, 0, 1)
+        self.assertAlmostEqual(f(0.15).value, 0.1, 1)
+        self.assertAlmostEqual(f(0.95).value, 0.02, 2)
 
+    def test_mamdani_fuzzy_input(self):
+        _input = [('A', A.build_triangular(0.1, 0.7, 0.8)), ('B', B.build_trapezoidal(0, 0.3, 0.5, 0.8))]
+        result = aggregate(_input, RB)
+        f = result['C'].membership_function
+        self.assertAlmostEqual(f(0.3).value, 0.82, 2)
+        self.assertAlmostEqual(f(0.6).value, 0.8, 1)
+
+    def test_larsen_fuzzy_input(self):
+        _input = [('A', A.build_triangular(0.1, 0.7, 0.8)), ('B', B.build_trapezoidal(0, 0.3, 0.5, 0.8))]
+        result = aggregate(_input, RB, method="Larsen")
+        f = result['C'].membership_function
+        self.assertAlmostEqual(f(0.3).value, 0.82, 2)
+        self.assertAlmostEqual(f(0.6).value, 0.65, 2)

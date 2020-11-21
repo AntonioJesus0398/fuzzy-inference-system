@@ -1,11 +1,11 @@
-# from src.classes import LinguisticVariable, FuzzyRuleBase
-# from src.membership_functions import triangular, trapezoidal
-# from src.fuzzy_inference_system import FuzzyInferenceSystem
+from src.classes import LinguisticVariable, FuzzyRuleBase
+from src.membership_functions import triangular, trapezoidal
+from src.fuzzy_inference_system import FuzzyInferenceSystem
 
 
-from classes import LinguisticVariable, FuzzyRuleBase, FuzzySet
-from membership_functions import triangular, trapezoidal, singleton
-from fuzzy_inference_system import FuzzyInferenceSystem
+# from classes import LinguisticVariable, FuzzyRuleBase, FuzzySet
+# from membership_functions import triangular, trapezoidal, singleton
+# from fuzzy_inference_system import FuzzyInferenceSystem
 
 Angle = LinguisticVariable(name='angle', domain=(0, 180), no_levels=180, scaling_function=lambda v: v/180)
 Angle.add_term('right-large', Angle.build_triangular(-1, 0, 45))

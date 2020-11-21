@@ -1,11 +1,11 @@
-# from src.fuzzification import scale_function, singleton_fuzzification
-# from src.inference_methods import aggregate
-# from src.defuzzification import center_of_area, bisector_of_area, mean_of_maximum
-# from src.classes import FuzzySet
+from src.inference_methods import aggregate
+from src.defuzzification import center_of_area, bisector_of_area, mean_of_maximum
+from src.classes import FuzzySet
 
-from inference_methods import aggregate
-from defuzzification import center_of_area, bisector_of_area, mean_of_maximum
-from classes import FuzzySet
+
+# from inference_methods import aggregate
+# from defuzzification import center_of_area, bisector_of_area, mean_of_maximum
+# from classes import FuzzySet
 
 class FuzzyInferenceSystem:
 
