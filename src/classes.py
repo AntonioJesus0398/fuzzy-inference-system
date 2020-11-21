@@ -9,7 +9,7 @@ class FuzzySet:
 
 class LinguisticVariable:
     # terms: a list of fuzzy sets
-    def __init__(self, name, domain, scaling_function=lambda v: v, unscaling_function=lambda v: v, no_levels=1000):
+    def __init__(self, name, domain, no_levels, scaling_function=lambda v: v, unscaling_function=lambda v: v):
         self.name = name
         self.domain = scaling_function(domain[0]), scaling_function(domain[1])
         self.scaling_function = scaling_function
@@ -18,7 +18,6 @@ class LinguisticVariable:
         self.step_size = (scaling_function(domain[1]) - scaling_function(domain[0])) / no_levels
         self.terms = {}
 
-        # print(f"Creating linguistic variable: {name}\ndomain: {self.domain}\nstep: {self.step_size}")
 
     def add_term(self, name, func, args):
         scaled_args = tuple(self.scaling_function(arg) for arg in args)
