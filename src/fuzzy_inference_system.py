@@ -3,7 +3,6 @@
 # from src.defuzzification import center_of_area, bisector_of_area, mean_of_maximum
 # from src.classes import FuzzySet
 
-from fuzzification import singleton_fuzzification
 from inference_methods import aggregate
 from defuzzification import center_of_area, bisector_of_area, mean_of_maximum
 from classes import FuzzySet
@@ -35,10 +34,3 @@ class FuzzyInferenceSystem:
         unscaled_result = {variable_name: self.rule_base.control_variables[variable_name].unscaling_function(deffuzified_result[variable_name]) for variable_name in deffuzified_result}
 
         return unscaled_result
-
-
-# def print_f(fz, step):
-#     x = 0
-#     while x <= 1:
-#         print(fz.membership_function(x).value)
-#         x += 0.001

@@ -62,8 +62,8 @@ for d_term in Distance.terms:
         except KeyError:
             rule_base.add_rule([('distance', d_term), ('angle', a_term)], [('direction', 'zero-turn')])
 
+
 FIS = FuzzyInferenceSystem(rule_base, inference_method="Larsen")
 
 a = FIS.solve([('distance', Distance.build_singleton(8)), ('angle', Angle.build_singleton(88))])
-
 print(a)

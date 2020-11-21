@@ -32,9 +32,6 @@ def get_matching_degree(fuzzy_sets, rule_base):
         x = left
         _max = MembershipValue(0)
         while x <= right:
-            a = A.membership_function(x)
-            b = B.membership_function(x)
-            # print(variable_name, x, A.membership_function(x).value, B.membership_function(x).value)
             _max |= (A.membership_function(x) & B.membership_function(x))
             x += variable.step_size
         matching_degree &= _max

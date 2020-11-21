@@ -6,6 +6,7 @@ class FuzzySet:
         self.domain = domain
         self.membership_function = membership_function
 
+
 class LinguisticVariable:
     # terms: a list of fuzzy sets
     def __init__(self, name, domain, no_levels, scaling_function=lambda v: v, unscaling_function=lambda v: v):
@@ -32,7 +33,6 @@ class LinguisticVariable:
         return self.name == other.name
 
 
-
 class FuzzyRule:
 
     # if x1 is A1 and x2 is A2 and ... and xn is An then y1 is B1 and 2y is B2 and ... ym is Bm
@@ -44,6 +44,7 @@ class FuzzyRule:
         premise = [f' {lv.name} is {term} ' for lv, term in self.antecedent]
         conclusion = [f' {lv.name} is {term} ' for lv, term in self.consequence]
         return 'If' + 'and'.join(premise) + 'then' + 'and'.join(conclusion)
+
 
 class FuzzyRuleBase:
     def __init__(self, state_variables, control_variables):
