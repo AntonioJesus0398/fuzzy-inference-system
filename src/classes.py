@@ -14,10 +14,8 @@ class LinguisticVariable:
         self.domain = scaling_function(domain[0]), scaling_function(domain[1])
         self.scaling_function = scaling_function
         self.unscaling_function = unscaling_function
-        self.no_levels = no_levels
         self.step_size = (scaling_function(domain[1]) - scaling_function(domain[0])) / no_levels
         self.terms = {}
-
 
     def add_term(self, name, func, args):
         scaled_args = tuple(self.scaling_function(arg) for arg in args)
