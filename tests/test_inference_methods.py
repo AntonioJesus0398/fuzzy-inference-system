@@ -15,10 +15,13 @@ C = LinguisticVariable('C', domain=(0, 1), no_levels=1000)
 C.add_term('C1', B.build_trapezoidal(0.1, 0.2, 0.5, 1))
 C.add_term('C2', B.build_triangular(0, 0.2, 0.4))
 
-RB = FuzzyRuleBase((A, B), (C,))
-RB.add_rule([('A', 'A1'), ('B', 'B1')], [('C', 'C1')])
-RB.add_rule([('A', 'A2'), ('B', 'B2')], [('C', 'C2')])
+D = LinguisticVariable('D', domain=(0, 1), no_levels=1000)
+D.add_term('D1', D.build_singleton(0.4))
+D.add_term('D2', D.build_triangular(0.1, 0.3, 0.8))
 
+RB = FuzzyRuleBase((A, B), (C, D))
+RB.add_rule([('A', 'A1'), ('B', 'B1')], [('C', 'C1'), ('D', 'D1')])
+RB.add_rule([('A', 'A2'), ('B', 'B2')], [('C', 'C2'), ('D', 'D2')])
 
 class InferenceMethodsTestCase(unittest.TestCase):
     def test_mamdani_singleton_input(self):

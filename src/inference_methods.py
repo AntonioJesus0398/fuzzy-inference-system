@@ -11,7 +11,7 @@ def aggregate(input_value, rule_base: FuzzyRuleBase, method="Mamdani"):
     rules = rule_base.rules
     results = {}
     for control_variable in rules:
-        def f(w):
+        def f(w, control_variable=control_variable):
             result = MembershipValue(0)
             for r in rules[control_variable]:
                 matching_degree = get_matching_degree(zip(input_value, [variable.terms[term_name] for variable, term_name in r.antecedent]), rule_base)
@@ -21,7 +21,7 @@ def aggregate(input_value, rule_base: FuzzyRuleBase, method="Mamdani"):
                 else:
                     result |= (matching_degree * variable.terms[term_name].membership_function(w))
             return result
-        results[control_variable] = FuzzySet(membership_function=lambda x: f(x), domain=rule_base.control_variables[control_variable].domain)
+        results[control_variable] = FuzzySet(membership_function=f, domain=rule_base.control_variables[control_variable].domain)
     return results
 
 def get_matching_degree(fuzzy_sets, rule_base):
