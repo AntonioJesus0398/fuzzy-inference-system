@@ -2,11 +2,6 @@ from src.classes import LinguisticVariable, FuzzyRuleBase
 from src.membership_functions import triangular, trapezoidal
 from src.fuzzy_inference_system import FuzzyInferenceSystem
 
-
-# from classes import LinguisticVariable, FuzzyRuleBase, FuzzySet
-# from membership_functions import triangular, trapezoidal, singleton
-# from fuzzy_inference_system import FuzzyInferenceSystem
-
 Angle = LinguisticVariable(name='angle', domain=(0, 180), no_levels=180, scaling_function=lambda v: v/180)
 Angle.add_term('right-large', Angle.build_triangular(-1, 0, 45))
 Angle.add_term('right-medium', Angle.build_triangular(30, 45, 60))
@@ -39,7 +34,7 @@ space_partition = {
     ('far', 'zero-angle'): 'right-mild',
     ('far', 'left-small'): 'right-mild',
     ('little-far', 'right-medium'): 'left-mild',
-    ('little-far', 'right-samall'): 'left-medium',
+    ('little-far', 'right-small'): 'left-medium',
     ('little-far', 'zero-angle'): 'right-medium',
     ('little-far', 'left-small'): 'right-medium',
     ('little-far', 'left-medium'): 'right-mild',
@@ -62,8 +57,11 @@ for d_term in Distance.terms:
         except KeyError:
             rule_base.add_rule([('distance', d_term), ('angle', a_term)], [('direction', 'zero-turn')])
 
+for control_variable in rule_base.rules:
+    for rule in rule_base.rules[control_variable]:
+        print(rule)
 
 FIS = FuzzyInferenceSystem(rule_base, inference_method="Larsen")
 
 a = FIS.solve([('distance', Distance.build_singleton(8)), ('angle', Angle.build_singleton(88))])
-print(a)
+# print(a)

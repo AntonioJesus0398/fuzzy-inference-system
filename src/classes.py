@@ -1,5 +1,5 @@
-# from membership_functions import triangular, trapezoidal, singleton
 from src.membership_functions import triangular, trapezoidal, singleton
+
 class FuzzySet:
 
     def __init__(self, membership_function, domain):
