@@ -12,7 +12,7 @@ def integrate(func, step, interval):
 def bisector_of_area(A, step):
     f = A.membership_function
     total_area = integrate(f, step, A.domain)
-    x = 0
+    x = A.domain[0]
     acc_area = 0
     mid_area = total_area / 2
 
