@@ -144,12 +144,12 @@
 
 \begin{table}[htb]%
 	\begin{center}
-		 \begin{tabular}{| l | l | p{5.3cm} |}
+		 \begin{tabular}{| l | l | l |p{4.6cm} |}
 			  \hline
-			    Variable & Tipo & Términos \\ \hline
-			    Distancia & Estado & muy cerca, cerca, un poco lejos, lejos, muy lejos \\ \hline
-			    Ángulo & Estado & der-grande, der-mediano, \newline der-pequeño, nulo, izq-pequeño, izq-mediano, izq-grande \\ \hline
-			    Dirección & Control & izq-cerrado, izq-moderado, \newline izq-leve, recto, der-leve, \newline der-moderado, der-cerrado \\ \hline
+			    Variable & Tipo & Dominio & Términos \\ \hline
+			    Distancia & Estado & [0, 100] & muy cerca, cerca, un poco lejos, lejos, muy lejos \\ \hline
+			    Ángulo & Estado & [0, 180] & der-grande, der-mediano, \newline der-pequeño, nulo, izq-pequeño, izq-mediano, izq-grande \\ \hline
+			    Dirección & Control & [0, 180] & izq-cerrado, izq-moderado, \newline izq-leve, recto, der-leve, \newline der-moderado, der-cerrado \\ \hline
 		  \end{tabular}		  
 		  \caption{Variables lingüisticas del problema  \label{tab:lv}}%		 
 	\end{center}
@@ -168,7 +168,8 @@ en un conjunto difuso de tipo singleton, como se muestra en la figura \ref{fig:f
 	\caption{Método de fusificación.\label{fig:fuzzification}}%
 \end{figure}
 
- 
+\subsection{Discretización y normalización de los datos}\label{sub:discretization_and_normalization}
+\paragraph{}
 
 %===================================================================================
 
