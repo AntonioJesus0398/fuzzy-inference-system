@@ -95,14 +95,49 @@
 
 %===================================================================================
 
+
+\section{Características del sistema de inferencia propuesto}\label{sec:1}
+%---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+  \paragraph{} El sistema de inferencia propuesto acepta reglas con  múltiples variables de entrada y múltiples variables de salida. Las variables
+  en la entrada pueden ser tanto valores (singleton) como conjuntos difusos. El sistema permite trabajar con funciones de membresía
+  de cualquier tipo definidas por el usuario, y además brinda herramientas para facilitar el uso de funciones membresía de tipo singleton, triangular
+  y trapezoidal. Los métodos de inferencia que tiene implementados son los de Mamdani y Larsen, y los métodos de desdifusificación que
+  brinda son los de Centroide (Center of Area), Bisección (Bisector of Area), y Media de los Máximos (Mean of Maximum).
+
 %===================================================================================
-% Introducción
-%-----------------------------------------------------------------------------------
-\section{Introducción}\label{sec:intro}
-%-----------------------------------------------------------------------------------
-  En esta sección puede incluir una presentación del dominio de su problema,
-  los objetivos y motivaciones fundamentales de su investigación así como un
-  resumen del estado del arte al respecto.
+
+\section{Principales ideas seguidas para la implementación del sistema}\label{sec:2}
+%---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+  \paragraph{} El sistema fue implementado en Python y consiste en una librería que permite a cualquier otro programador usarla para
+  resolver (siempre y cuando esté bien modelado) cualquier problema cuya solución se obtenga mediante inferencia difusa. El programador
+  puede escoger el método de inferencia y el método de desdifusificación que más se ajuste al problema con que está tratando. Además, dado que
+  el universo de discusión del problema puede ser continuo es necesario discretizar las funciones de membresía provistas por el usuario
+  para poder efectuar tanto los métodos de inferencia como los de desdifusificación. La discretización que se realiza es uniforme y es tarea del
+  programador definir el número de segmentos o niveles en que se divide el universo del problema original. También se puede proveer al sistema de
+  una función para normalizar la entrada en un determinado rango. El sistema trabaja con cuatro entidades fundamentales: conjuntos difusos, variables
+  linguísticas, reglas difusas y bases de reglas difusas. Estas entidades a su vez deben ser usadas por el programador para modelar su problema. Internamente solo
+  se trabaja con reglas de tipo MISO (multiple input single output), pero como toda regla MIMO (multiple input multiple output) puede ser transformada en una conju
+  nto de reglas de tipo MISO, se brinda una interfaz para modelar el problema con reglas MIMO, las cuales se descomponen internamente en varias reglas de tipo MISO.   
+
+%===================================================================================
+
+\section{Propuesta de problema a solucionar mediante inferencia difusa}\label{sec:3}
+%---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+  \paragraph{}   El problema propuesto consiste en simular el movimiento de un robot sobre un espacio en el que existen obstaculos.
+  El robot tiene sensores que le permiten detectar la distancia a la que se encuentra del objeto más cercano así como el ángulo que forma
+  con el mismo. Conocidos estos parámetros el robot debe determinar que dirección tomar para evitar chocar con el obstáculo (Figura \ref{ex})
+  
+	\begin{figure}[htb]%
+		\begin{center}
+			\setlength\fboxsep{0pt}
+			\setlength\fboxrule{1.5pt}
+			\fbox{\includegraphics[width=200px, height=200px]{images/problem_description.jpg}}
+		\end{center}
+		\caption{Descripción del problema \label{ex}}%
+	\end{figure}
 
 %===================================================================================
 
@@ -158,17 +193,19 @@
 
 %-----------------------------------------------------------------------------------
 	\subsection{Figuras}\label{sub:figures}
+	
+
 %-----------------------------------------------------------------------------------
 		Para producir cuerpos flotantes (figuras ó tablas), asegúrese de numerar
 		y etiquetar correctamente cada figura. Las referencias a las figuras deben
-		estar también correctamente etiquetadas. Por ejemplo, en la Fig. \ref{fig:ex}
+		estar también correctamente etiquetadas. Por ejemplo, en la Fig. \ref{fig:arr}
 		se muestra\ldots.
 
 		\begin{figure}[htb]%
 		\begin{center}
-			\emph{Aquí va el contenido de la figura \ldots}
+		\includegraphics[width=200px, height=200px]{images/problem_description.jpg}
 		\end{center}
-		\caption{Figura de ejemplo \label{fig:ex}}%
+		\caption{Descripción del problema \label{fig:arr}}%
 		\end{figure}
 
 %-----------------------------------------------------------------------------------
@@ -254,6 +291,7 @@
 %-----------------------------------------------------------------------------------
 
 \label{end}
+
 
 \end{document}
 
