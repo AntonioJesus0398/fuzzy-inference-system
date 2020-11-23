@@ -128,7 +128,7 @@
 
   \paragraph{}   El problema propuesto consiste en simular el movimiento de un robot sobre un espacio en el que existen obstaculos.
   El robot tiene sensores que le permiten detectar la distancia a la que se encuentra del objeto más cercano así como el ángulo que forma
-  con el mismo. Conocidos estos parámetros el robot debe determinar que dirección tomar para evitar chocar con el obstáculo (Figura \ref{ex})
+  con el mismo. Conocidos estos parámetros el robot debe determinar que dirección tomar para evitar chocar con el obstáculo (Figura \ref{fig:problem})
   
 	\begin{figure}[htb]%
 		\begin{center}
@@ -136,7 +136,7 @@
 			\setlength\fboxrule{1.5pt}
 			\fbox{\includegraphics[width=200px, height=200px]{images/problem_description.jpg}}
 		\end{center}
-		\caption{Descripción del problema \label{ex}}%
+		\caption{Descripción del problema \label{fig:problem}}%
 	\end{figure}
 
 \subsection{Variables linguísticas definidas}\label{sub:variables}
@@ -150,14 +150,25 @@
 			    Distancia & Estado & muy cerca, cerca, un poco lejos, lejos, muy lejos \\ \hline
 			    Ángulo & Estado & der-grande, der-mediano, \newline der-pequeño, nulo, izq-pequeño, izq-mediano, izq-grande \\ \hline
 			    Dirección & Control & izq-cerrado, izq-moderado, \newline izq-leve, recto, der-leve, \newline der-moderado, der-cerrado \\ \hline
-		  \end{tabular}
-		  
-		  \caption{Variables lingüisticas del problema  \label{tab:lv}}%
-		 
+		  \end{tabular}		  
+		  \caption{Variables lingüisticas del problema  \label{tab:lv}}%		 
 	\end{center}
 \end{table}
 
-%\subsection{Variables linguísticas definidas}\label{sub:variables}
+\subsection{Método de fusificación empleado}\label{sub:fuzzification}
+\paragraph{} No existe incertidumbre en los datos pero como los metodos de inferencia reciben conjuntos difusos como entrada debemos convertir cada valor
+en un conjunto difuso de tipo singleton, como se muestra en la figura \ref{fig:fuzzification}.
+
+\begin{figure}[htb]%
+	\begin{center}
+		%\setlength\fboxsep{0pt}
+		%\setlength\fboxrule{1.5pt}
+		\fbox{\includegraphics[width=200px, height=200px]{images/fuzzification.jpg}}
+	\end{center}
+	\caption{Método de fusificación.\label{fig:fuzzification}}%
+\end{figure}
+
+ 
 
 %===================================================================================
 
