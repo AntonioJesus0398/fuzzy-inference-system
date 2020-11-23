@@ -169,7 +169,21 @@ en un conjunto difuso de tipo singleton, como se muestra en la figura \ref{fig:f
 \end{figure}
 
 \subsection{Discretización y normalización de los datos}\label{sub:discretization_and_normalization}
-\paragraph{}
+\paragraph{} La cantidad de segmentos en que se dividieron los universos de discusión de las variables, así como la fórmula que se aplico para
+normalizarlos a todos en el intervalo [0, 1] se muestran en la Tabla \ref{tab:disc_norm}.
+
+\begin{table}[htb]%
+	\begin{center}
+		 \begin{tabular}{| l | l | p{2.5cm} |}
+			  \hline
+			    Variable & No. de segmentos &  Ecuación de normalización \\ \hline
+			    Distancia &  100 &  $$ d' = \frac{1}{d} $$ \\ \hline
+			    Ángulo & 180 & $$ a' = \frac{1}{a} $$ \\ \hline
+			    Dirección & 180 & $$ v' = \frac{1}{v} $$ \\ \hline
+		  \end{tabular}		  
+		  \caption{Variables lingüisticas del problema  \label{tab:disc_norm}}%		 
+	\end{center}
+\end{table}
 
 %===================================================================================
 
