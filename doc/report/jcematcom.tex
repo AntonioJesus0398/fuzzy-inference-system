@@ -16,7 +16,7 @@
 %===================================================================================
 % PREÁMBULO
 %-----------------------------------------------------------------------------------
-\documentclass[a4paper,10pt,twocolumn]{article}
+\documentclass[a4paper,10pt]{article}
 
 %===================================================================================
 % Paquetes
@@ -74,7 +74,7 @@
 %-----------------------------------------------------------------------------------
 % NO BORRAR ESTA LINEA!
 %-----------------------------------------------------------------------------------
-\twocolumn[
+%\twocolumn[
 %-----------------------------------------------------------------------------------
 
 \maketitle
@@ -88,8 +88,8 @@
 %-----------------------------------------------------------------------------------
 % NO BORRAR ESTAS LINEAS!
 %-----------------------------------------------------------------------------------
-\vspace{0.8cm}
-]
+%\vspace{0.8cm}
+%]
 %-----------------------------------------------------------------------------------
 
 
@@ -144,12 +144,12 @@
 
 \begin{table}[htb]%
 	\begin{center}
-		 \begin{tabular}{| l | l | l |p{4.6cm} |}
+		 \begin{tabular}{| l | l | l |p{3.5cm}|}
 			  \hline
 			    Variable & Tipo & Dominio & Términos \\ \hline
-			    Distancia & Estado & [0, 100] & muy cerca, cerca, un poco lejos, lejos, muy lejos \\ \hline
-			    Ángulo & Estado & [0, 180] & der-grande, der-mediano, \newline der-pequeño, nulo, izq-pequeño, izq-mediano, izq-grande \\ \hline
-			    Dirección & Control & [0, 180] & izq-cerrado, izq-moderado, \newline izq-leve, recto, der-leve, \newline der-moderado, der-cerrado \\ \hline
+			    Distancia & Estado & [0, 100] & muy cerca (PN), \newline cerca (N), \newline un poco lejos (LF), \newline lejos (F), \newline muy lejos (PF) \\ \hline
+			    Ángulo & Estado & [0, 180] & der-grande (RL), \newline der-mediano (RM), \newline der-pequeño (RS), \newline nulo (Z), \newline izq-pequeño (LS), \newline 					izq-mediano (LM), \newline izq-grande (LL) \\ \hline
+			    Dirección & Control & [0, 180] & izq-cerrado (LS), \newline izq-moderado (LME), \newline izq-leve (LMI), \newline recto (ZT), \newline der-leve (RMI), \newline 				der-moderado (RME), \newline der-cerrado (RS) \\ \hline
 		  \end{tabular}		  
 		  \caption{Variables lingüisticas del problema  \label{tab:lv}}%		 
 	\end{center}
@@ -160,10 +160,8 @@
 en un conjunto difuso de tipo singleton, como se muestra en la figura \ref{fig:fuzzification}.
 
 \begin{figure}[htb]%
-	\begin{center}
-		%\setlength\fboxsep{0pt}
-		%\setlength\fboxrule{1.5pt}
-		\fbox{\includegraphics[width=200px, height=200px]{images/fuzzification.jpg}}
+	\begin{center}		
+		\includegraphics[width=200px, height=200px]{images/fuzzification.jpg}
 	\end{center}
 	\caption{Método de fusificación.\label{fig:fuzzification}}%
 \end{figure}
@@ -184,6 +182,81 @@ normalizarlos a todos en el intervalo [0, 1] se muestran en la Tabla \ref{tab:di
 		  \caption{Variables lingüisticas del problema  \label{tab:disc_norm}}%		 
 	\end{center}
 \end{table}
+
+
+\subsection{Selección de las funciones de membresía}\label{sub:membership_functions}
+	\paragraph{} Las funciones de membresía utilizadas fueron en su mayoria triangulares, excpeto para los términos nulo y recto correspondientes
+	a las variables ángulo y dirección respectivamente que están representados por conjuntos singleton. Dada la naturaleza discreta de las computadoras y que las funciones 		de membresía de los  conjuntos singleton tienen un solo valor distinto de 0 en todo su dominio, puede no alcanzarse los resultados esperados si las funciones las 				implementamos exactamente como están definidas. En su lugar aplicamos una transformación. La función:
+
+	\begin{equation}
+		\label{eq:singleton}
+		f(x) = \left\{
+		\begin{array}{lc}
+			1 & \mathrm{si\ } x = a \\
+			0 & e.o.c \\
+		\end{array}
+		\right.
+	\end{equation},   
+	la transformamos en:
+	   
+	\begin{equation}
+		\label{eq:trapezoidal}
+		f(x) = \left\{
+			\begin{array}{lc}
+			 	1 & \mathrm{si\ } x \in  [a - \frac{\epsilon}{2}, b + \frac{\epsilon}{2}] \\
+			 	0 & e.o.c \\
+		      \end{array}
+		     \right.
+	\end{equation},   
+	donde $\epsilon$ es el tamaño de un segmento o nivel de la variable.
+	   
+	\begin{figure}[htb]%
+		\begin{center}
+			\includegraphics[width=200px, height=200px]{images/distance_plot.jpg}
+		\end{center}
+		\caption{Distancia \label{fig:distance_plot}}%
+	\end{figure}
+	
+	\begin{figure}[htb]%
+		\begin{center}
+			\includegraphics[width=200px, height=200px]{images/angle_plot.jpg}
+		\end{center}
+		\caption{Ángulo \label{fig:angle_plot}}%
+	\end{figure}
+	
+	\begin{figure}[htb]%
+		\begin{center}
+			\includegraphics[width=200px, height=200px]{images/direction_plot.jpg}
+		\end{center}
+		\caption{Dirección \label{fig:direction_plot}}%
+	\end{figure}
+
+\subsection{Construccion de la base de reglas difusas}\label{sub:fuzzy_rule_base}
+	\paragraph{} Para representar el conocimiento  utilizamos reglas difusas de la forma:
+	
+	\begin{quote}
+		``Si la distancia es $A_{i}$ y el ángulo es $B_{i}$, entonces la direccion es $C_{i}$.''
+	\end{quote}
+	
+		A partir de un análisis detallado del problema se pudo construir el siguiente conjunto de reglas difusas representado en la Figura \ref{fig:fuzzy_rule_base}.
+	Para leer una regla escogemos una fila para la distancia y una columna para el ángulo y la intersección es la dirección. Por ejemplo, si la distancia es cerca(N) y el ángulo 		es pequeño a la derecha (RS) entonces la direccion que debemos tomar es doblando a la izquierda cerrado (LS). 
+	
+	\begin{figure}[htb]%
+		\begin{center}
+			\includegraphics[width=200px, height=200px]{images/fuzzy_rule_base.jpg}
+		\end{center}
+		\caption{Base de reglas difusas \label{fig:fuzzy_rule_base}}%
+	\end{figure}
+	
+	\begin{figure}[htb]%
+		\begin{center}
+			\includegraphics[width=200px, height=300px]{images/terms_legend.jpg}
+		\end{center}
+		\caption{Leyenda \label{fig:terms_legend}}%
+	\end{figure}
+	
+	
+	
 
 %===================================================================================
 

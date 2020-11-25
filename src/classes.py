@@ -1,4 +1,6 @@
 from src.membership_functions import triangular, trapezoidal, singleton
+from numpy import arange
+import matplotlib.pyplot as plt
 
 class FuzzySet:
 
@@ -28,6 +30,14 @@ class LinguisticVariable:
 
     def add_term(self, name, fz):
         self.terms[name] = fz
+
+    def plot(self):
+        x = arange(self.domain[0], self.domain[1], self.step_size)
+        for term_name, fz in self.terms.items():
+            y = [fz.membership_function(i).value for i in x]
+            plt.plot(x, y, label=term_name)
+        plt.legend(loc='best', fontsize="small")
+        plt.show()
 
     def __eq__(self, other):
         return self.name == other.name
