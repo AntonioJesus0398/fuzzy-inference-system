@@ -28,6 +28,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{listings}
 \usepackage[pdftex]{hyperref}
+\usepackage{array}
 %-----------------------------------------------------------------------------------
 % Configuración
 %-----------------------------------------------------------------------------------
@@ -144,12 +145,12 @@
 
 \begin{table}[htb]%
 	\begin{center}
-		 \begin{tabular}{| l | l | l |p{3.5cm}|}
+		 \begin{tabular}{| c | c | c |p{3.5cm}| p{2cm} | p{2.5cm} |}
 			  \hline
-			    Variable & Tipo & Dominio & Términos \\ \hline
-			    Distancia & Estado & [0, 100] & muy cerca (PN), \newline cerca (N), \newline un poco lejos (LF), \newline lejos (F), \newline muy lejos (PF) \\ \hline
-			    Ángulo & Estado & [0, 180] & der-grande (RL), \newline der-mediano (RM), \newline der-pequeño (RS), \newline nulo (Z), \newline izq-pequeño (LS), \newline 					izq-mediano (LM), \newline izq-grande (LL) \\ \hline
-			    Dirección & Control & [0, 180] & izq-cerrado (LS), \newline izq-moderado (LME), \newline izq-leve (LMI), \newline recto (ZT), \newline der-leve (RMI), \newline 				der-moderado (RME), \newline der-cerrado (RS) \\ \hline
+			    Variable & Tipo & Dominio & Términos & No. segmentos & Ecuacion de normalización \\ \hline
+			    Distancia & Estado & [0, 100] & muy cerca (PN), \newline cerca (N), \newline un poco lejos (LF), \newline lejos (F), \newline muy lejos (PF) & 100 &  $$ d' = \frac{d}{100} $$ \\ \hline
+			    Ángulo & Estado & [0, 180] & der-grande (RL), \newline der-mediano (RM), \newline der-pequeño (RS), \newline nulo (Z), \newline izq-pequeño (LS), \newline 					izq-mediano (LM), \newline izq-grande (LL) & 180 &  $$a' = \frac{a}{180}$$ \\ \hline
+			    Dirección & Control & [0, 180] & izq-cerrado (LS), \newline izq-moderado (LME), \newline izq-leve (LMI), \newline recto (ZT), \newline der-leve (RMI), \newline 				der-moderado (RME), \newline der-cerrado (RS) & 180 & $$ v' = \frac{v}{180} $$ \\ \hline
 		  \end{tabular}		  
 		  \caption{Variables lingüisticas del problema  \label{tab:lv}}%		 
 	\end{center}
@@ -165,23 +166,6 @@ en un conjunto difuso de tipo singleton, como se muestra en la figura \ref{fig:f
 	\end{center}
 	\caption{Método de fusificación.\label{fig:fuzzification}}%
 \end{figure}
-
-\subsection{Discretización y normalización de los datos}\label{sub:discretization_and_normalization}
-\paragraph{} La cantidad de segmentos en que se dividieron los universos de discusión de las variables, así como la fórmula que se aplico para
-normalizarlos a todos en el intervalo [0, 1] se muestran en la Tabla \ref{tab:disc_norm}.
-
-\begin{table}[htb]%
-	\begin{center}
-		 \begin{tabular}{| l | l | p{2.5cm} |}
-			  \hline
-			    Variable & No. de segmentos &  Ecuación de normalización \\ \hline
-			    Distancia &  100 &  $$ d' = \frac{1}{d} $$ \\ \hline
-			    Ángulo & 180 & $$ a' = \frac{1}{a} $$ \\ \hline
-			    Dirección & 180 & $$ v' = \frac{1}{v} $$ \\ \hline
-		  \end{tabular}		  
-		  \caption{Variables lingüisticas del problema  \label{tab:disc_norm}}%		 
-	\end{center}
-\end{table}
 
 
 \subsection{Selección de las funciones de membresía}\label{sub:membership_functions}
@@ -262,27 +246,6 @@ normalizarlos a todos en el intervalo [0, 1] se muestran en la Tabla \ref{tab:di
 
 
 
-%===================================================================================
-% Desarrollo
-%-----------------------------------------------------------------------------------
-\section{Desarrollo}\label{sec:dev}
-%-----------------------------------------------------------------------------------
-  En esta sección (o secciones) incluya el contenido fundamental del artículo.
-  No es necesario tener una sección nombrada \emph{Desarrollo}, por el contrario,
-  nombre las secciones según el contenido que tratan.
-
-%-----------------------------------------------------------------------------------
-	\subsection{Organización del Documento}\label{sub:results}
-%-----------------------------------------------------------------------------------
-		Puede agregar secciones y subsecciones según sea necesario para organizar
-		de manera más coherente su artículo. Tenga en cuenta que un documento más
-		plano es más fácil de navegar y entender, pero las subsecciones relacionadas
-		deberían estar agrupadas en una sección común.
-
-		Los nombres de las secciones deben ir en mayúsculas, excepto para las
-		preposiciones, conjunciones, y otros vocablos auxiliares.
-
-		Empiece un nuevo párrafo cada vez que vaya a comenzar una idea nueva.
 
 %-----------------------------------------------------------------------------------
 	\subsection{Listas y Descripciones}\label{sub:lists}
