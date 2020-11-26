@@ -4,26 +4,27 @@ from src.classes import FuzzySet
 
 class FuzzyInferenceSystem:
 
-    def __init__(self, rule_base, inference_method="Mamdani", defuzzification_method="coa"):
+    def __init__(self, rule_base):
         self.rule_base = rule_base
-        self.inference_method = inference_method
 
-        if defuzzification_method == "coa":
-            self.defuzzification_method = center_of_area
-        elif defuzzification_method == "boa":
-            self.defuzzification_method = bisector_of_area
-        elif defuzzification_method == "mom":
-            self.defuzzification_method = mean_of_maximum
-        else:
-            raise ValueError(f"'{defuzzification_method}' is not a valid defuzzification method")
-
-    def solve(self, _input):
+    def solve(self, _input, inference_method="Mamdani", defuzzification_method="coa"):
 
         # perform the inference method
-        fuzzy_result = aggregate(_input, self.rule_base, method=self.inference_method)
+        if not inference_method in ["Mamdani", "Larsen"]:
+            raise ValueError("Inapropiate fuzzification method. The available values are: Mamdani, Larsen")
+        fuzzy_result = aggregate(_input, self.rule_base, method=inference_method)
 
         # apply the defuzzification operator
-        deffuzified_result = {variable_name: self.defuzzification_method(fuzzy_result[variable_name], step=self.rule_base.control_variables[variable_name].step_size) for variable_name in fuzzy_result.keys()}
+        _deffuzification_method = None
+        if defuzzification_method == "coa":
+            _deffuzification_method = center_of_area
+        elif defuzzification_method == "boa":
+            _deffuzification_method = bisector_of_area
+        elif defuzzification_method == "mom":
+            _deffuzification_method = mean_of_maximum
+        else:
+            raise ValueError("Inapropiate defuzzifiaction method. The available values are: mom, coa, boa")
+        deffuzified_result = {variable_name: _deffuzification_method(fuzzy_result[variable_name], step=self.rule_base.control_variables[variable_name].step_size) for variable_name in fuzzy_result.keys()}
 
         # unscale the result
         unscaled_result = {variable_name: self.rule_base.control_variables[variable_name].unscaling_function(deffuzified_result[variable_name]) for variable_name in deffuzified_result}
