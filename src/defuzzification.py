@@ -44,7 +44,7 @@ def mean_of_maximum(A, step):
     while x <= right:
         maximum = max(f(x).value, maximum)
         x += step
-    if x < step:
+    if x < right:
         maximum = max(f(right).value, maximum)
 
     k = 0
@@ -58,5 +58,5 @@ def mean_of_maximum(A, step):
     if x < right and f(right) == maximum:
         _sum += right
         k += 1
-
+    print(_sum / k)
     return _sum / k
