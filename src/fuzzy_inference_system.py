@@ -26,7 +26,4 @@ class FuzzyInferenceSystem:
             raise ValueError("Inapropiate defuzzifiaction method. The available values are: mom, coa, boa")
         deffuzified_result = {variable_name: _deffuzification_method(fuzzy_result[variable_name], step=self.rule_base.control_variables[variable_name].step_size) for variable_name in fuzzy_result.keys()}
 
-        # unscale the result
-        unscaled_result = {variable_name: self.rule_base.control_variables[variable_name].unscaling_function(deffuzified_result[variable_name]) for variable_name in deffuzified_result}
-
-        return unscaled_result
+        return deffuzified_result

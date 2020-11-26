@@ -105,7 +105,7 @@ class Circle:
         self.radius = radius
 
     def distance_and_angle(self, other):
-        hip = self.center.distance(other.center) 
+        hip = self.center.distance(other.center)
         d = hip - self.radius - other.radius
         co = Point(self.center.x, self.center.y).distance(Point(other.center.x, self.center.y))
         sx = co / hip
@@ -115,11 +115,26 @@ class Circle:
             x = 180 - x
         return d, x
 
+LEFT = 0
+RIGHT = 100
+START = 40
+FINISH = 100
+ROBOT_SIZE = 1
+
+
+
+logger = open('logging.txt', "w")
+logger.close()
+def write(s):
+    with open('logging.txt', "a") as logger:
+        logger.write(s)
+
 def simulate(robot, obstacles, inference_method, defuzzification_method):
     while len(obstacles) > 0:
         # Look for the nearest object to the robot
-        print(f"Position: {robot.center.x, robot.center.y}")
+        # print(f"Position: {robot.center.x, robot.center.y}")
         # print(obstacles)
+        write(f"Position: {robot.center.x, robot.center.y}\n")
         shortest_distance, angle = robot.distance_and_angle(obstacles[0])
         for o in obstacles[1:]:
             d, a = robot.distance_and_angle(o)
@@ -127,23 +142,29 @@ def simulate(robot, obstacles, inference_method, defuzzification_method):
                 shortest_distance, angle = d, a
 
         # the borders are also objects
-        left = Circle(center=Point(0, robot.center.y), radius=0)
+        left = Circle(center=Point(LEFT, robot.center.y), radius=0)
         d, a = robot.distance_and_angle(left)
         if d < shortest_distance:
             shortest_distance, angle = d, a
-        right = Circle(center=Point(100, robot.center.y), radius=0)
+        right = Circle(center=Point(RIGHT, robot.center.y), radius=0)
         d, a = robot.distance_and_angle(right)
         if d < shortest_distance:
             shortest_distance, angle = d, a
 
         # Compute the new direction to take and move in that direction
-        new_direction_angle = FIS.solve([('distance', Distance.build_singleton(shortest_distance)), ('angle', Angle.build_singleton(angle))], inference_method=inference_method, defuzzification_method=defuzzification_method)['direction']
+        try:
+            new_direction_angle = FIS.solve([('distance', Distance.build_singleton(shortest_distance)), ('angle', Angle.build_singleton(angle))], inference_method=inference_method, defuzzification_method=defuzzification_method)['direction']
+        except ZeroDivisionError:
+            print(shortest_distance, angle)
+            exit(1)
         new_position = Point(robot.center.x + cos(new_direction_angle), robot.center.y + sin(new_direction_angle))
         robot.center = new_position
 
         # Check if a colission has been ocurred
         for o in obstacles + [left, right]:
-            if robot.center.distance(o.center) <= 0:
+            if robot.distance_and_angle(o)[0] <= 0:
+                
+                write(f"FAIL!!!!!!!!!!!!!. Object: ({o.center.x, o.center.y}): {o.radius}\n\n\n\n")
                 return "fail"
 
         # remove passed objects
@@ -158,40 +179,45 @@ def simulate(robot, obstacles, inference_method, defuzzification_method):
 
 def set_obstacles():
     obstacles = []
-    no_obstacles = random.randint(1, 15)
-
+    no_obstacles = 10
+    write(f"Obstacles:\n")
     for _ in range (no_obstacles):
-        x = random.randint(0, 100)
-        y = random.randint(10, 100)
-        c = Circle(center=Point(x, y), radius=random.randint(1, 5))
+        x = random.randint(LEFT, RIGHT)
+        y = random.randint(START, FINISH)
+        radius=random.randint(5, 10)
+        write(f"({x}, {y}): {radius}\n")
+        c = Circle(center=Point(x, y), radius=radius)
         obstacles.append(c)
-
+    write('\n\n')
     return obstacles
 
 
 def perform_simulations(no_simulations):
     inference_methods = ["Mamdani", "Larsen"]
-    defuzzification_methods = ["coa"]
-    results = {}
+    defuzzification_methods = ["coa", "boa", "mom"]
+    results = {(im, dm): 0 for im in inference_methods for dm in defuzzification_methods}
 
-    for _ in range(no_simulations):
-        start_point = Point(random.randint(10, 90), 0)
+    for i in range(no_simulations):
+        print(f"Simulation #{i}\n")
+        write(f"\n\n--------------------------Simulation #{i}-------------------\n\n")
+        start_point = Point(random.randint(LEFT + ROBOT_SIZE + 2, RIGHT - ROBOT_SIZE - 2), 0)
         obstacles = set_obstacles()
         for im in inference_methods:
             for dm in defuzzification_methods:
-                robot = Circle(center=start_point, radius=1)
+                write(f'{im}, {dm}\n')
+                results[im, dm] = 0
+                robot = Circle(center=start_point, radius=ROBOT_SIZE)
                 obstacles_copy = list(obstacles)
                 result = simulate(robot, obstacles_copy, inference_method=im, defuzzification_method=dm)
                 if result == "fail":
-                    try:
-                        results[im, dm] += 1
-                    except:
-                        results[im, dm] = 1
+                    results[im, dm] += 1
+                else:
+                    write('SUCCESS!!!!!!!!!\n\n\n\n')
 
     return results
 
 
-results = perform_simulations(1)
+results = perform_simulations(10)
 print(results)
 
 # class InputError(Exception):

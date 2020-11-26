@@ -21,9 +21,10 @@ def membership_function(f):
         return MembershipValue(f(*args))
     return func
 
-def triangular(a1, a2, a3, step=0.001):
+def triangular(a1, a2, a3):
     @membership_function
     def f(x):
+        # print(x, a1, a2, a3)
         if x >= a1 and x <= a2:
             return (x - a1) / (a2 - a1)
         if x >= a2 and x <= a3:
@@ -31,7 +32,7 @@ def triangular(a1, a2, a3, step=0.001):
         return 0
     return f
 
-def trapezoidal(a1, a2, a3, a4, step=0.001):
+def trapezoidal(a1, a2, a3, a4):
     @membership_function
     def f(x):
         if x >= a1 and x <= a2:
@@ -43,10 +44,10 @@ def trapezoidal(a1, a2, a3, a4, step=0.001):
         return 0
     return f
 
-def singleton(value, step=0.001):
+def singleton(value):
     @membership_function
     def f(x):
-        if x >= value - step / 2 and x <= value + step / 2:
+        if x == value:
             return 1
         return 0
     return f

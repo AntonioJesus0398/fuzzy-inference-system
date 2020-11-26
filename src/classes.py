@@ -11,22 +11,38 @@ class FuzzySet:
 
 class LinguisticVariable:
     # terms: a list of fuzzy sets
-    def __init__(self, name, domain, no_levels, scaling_function=lambda v: v, unscaling_function=lambda v: v):
+    def __init__(self, name, domain, no_levels):
         self.name = name
-        self.domain = scaling_function(domain[0]), scaling_function(domain[1])
-        self.scaling_function = scaling_function
-        self.unscaling_function = unscaling_function
-        self.step_size = (scaling_function(domain[1]) - scaling_function(domain[0])) / no_levels
+        self.domain = domain
+        self.step_size = (domain[1] - domain[0]) / no_levels
         self.terms = {}
 
+    def discretize(self, value):
+        left, right = self.domain
+        if value < left or value > right:
+            return value
+
+        x = value // self.step_size
+        y = x + 1
+
+        _x = left + x * self.step_size
+        _y = left + y * self.step_size
+
+        d1 = abs(value - _x)
+        d2 = abs(value - _y)
+
+        if d1 < d2:
+            return _x
+        return _y
+
     def build_singleton(self, v):
-        return FuzzySet(membership_function=singleton(self.scaling_function(v), step=self.step_size), domain=self.domain)
+        return FuzzySet(membership_function=singleton(self.discretize(v)), domain=self.domain)
 
     def build_triangular(self, a1, a2, a3):
-        return FuzzySet(membership_function=triangular(self.scaling_function(a1), self.scaling_function(a2), self.scaling_function(a3)), domain=self.domain)
+        return FuzzySet(membership_function=triangular(self.discretize(a1), self.discretize(a2), self.discretize(a3)), domain=self.domain)
 
     def build_trapezoidal(self, a1, a2, a3, a4):
-        return FuzzySet(membership_function=trapezoidal(self.scaling_function(a1), self.scaling_function(a2), self.scaling_function(a3), self.scaling_function(a4)), domain=self.domain)
+        return FuzzySet(membership_function=trapezoidal(self.discretize(a1), self.discretize(a2), self.discretize(a3), self.discretize(a4)), domain=self.domain)
 
     def add_term(self, name, fz):
         self.terms[name] = fz
