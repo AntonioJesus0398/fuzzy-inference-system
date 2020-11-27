@@ -25,35 +25,47 @@ class Point:
         self.x = x
         self.y = y
 
-    def distance(self, other):
+    def distance_to_point(self, other):
         d = math.sqrt((self.x - other.x)**2 + (self.y - other.y)**2)
-        if d > 100:
-            return 100
-        return d
-
-class Circle:
-    def __init__(self, center, radius):
-        self.center = center
-        self.radius = radius
-
-    def distance_and_angle(self, other):
-        hip = self.center.distance(other.center)
-        d = hip - self.radius - other.radius
-        co = Point(self.center.x, self.center.y).distance(Point(other.center.x, self.center.y))
-        sx = co / hip
+        co = (abs(self.y - other.y))
+        sx = co / d
         x = math.asin(sx)
         x = (180 * x) / math.pi
-        if other.center.x < self.center.x:
+        if other.x < self.x:
             x = 180 - x
+        if d > 100:
+            d = 100
         return d, x
 
+    def is_inside_of(self, rectangle):
+        return self.x >= rectangle.upper_left.x and self.x <= rectangle.upper_right.x and self.y >= rectangle.mid_down.y and self.y <= rectangle.upper_right.y
 
+    def distance_to_rectangle(self, rect):
+        if self.y < rect.mid_down.y:
+            return self.distance_to_point(rect.mid_down)
+        if self.x < rect.upper_left.x:
+            return self.distance_to_point(rect.upper_left)
+        if self.x > rect.upper_right.x:
+            return self.distance_to_point(rect.upper_right)
+        return 0, None
+
+class Rectangle:
+    def __init__(self, upper_left, width, height):
+        self.upper_left = upper_left
+        self.upper_right = Point(upper_left.x + width, upper_left.y)
+        self.mid_down = Point(upper_left.x + width/2, upper_left.y - height)
+        self.width = width
+        self.height = height
+
+    def __repr__(self):
+        x, y = self.upper_left.x, self.upper_left.y
+        w, h = self.width, self.height
+        return f'({x}, {y}): {w} X {h}'
 
 LEFT = 0
 RIGHT = 60
 START = 25
 FINISH = 100
-ROBOT_SIZE = 1
 
 logger = open('logging.txt', "w")
 logger.close()
@@ -66,22 +78,21 @@ def simulate(robot, obstacles, inference_method, defuzzification_method):
         # Look for the nearest object to the robot
         # print(f"Position: {robot.center.x, robot.center.y}")
         # print(obstacles)
-        write(f"Position: {round(robot.center.x, 2), round(robot.center.y, 2)} ")
-        shortest_distance, angle = robot.distance_and_angle(obstacles[0])
+        write(f"Position: {round(robot.x, 2), round(robot.y, 2)} ")
+        shortest_distance, angle = robot.distance_to_rectangle(obstacles[0])
         for o in obstacles[1:]:
-            d, a = robot.distance_and_angle(o)
+            d, a = robot.distance_to_rectangle(o)
             if d < shortest_distance:
                 shortest_distance, angle = d, a
-        
+
         # the borders are also objects
-        left = Circle(center=Point(LEFT, robot.center.y), radius=0)
-        d, a = robot.distance_and_angle(left)
+        d, a = RIGHT - robot.x, 0
         if d < shortest_distance:
             shortest_distance, angle = d, a
-        right = Circle(center=Point(RIGHT, robot.center.y), radius=0)
-        d, a = robot.distance_and_angle(right)
+        d, a = robot.x - LEFT, 180
         if d < shortest_distance:
             shortest_distance, angle = d, a
+
         write(f"Nearest: {round(shortest_distance, 2), round(angle, 1)} ")
         # Compute the new direction to take and move in that direction
         try:
@@ -90,19 +101,22 @@ def simulate(robot, obstacles, inference_method, defuzzification_method):
             print(shortest_distance, angle)
             exit(1)
         write(f"direction: {new_direction_angle}\n")
-        new_position = Point(robot.center.x + cos(new_direction_angle), robot.center.y + sin(new_direction_angle))
-        robot.center = new_position
+        new_position = Point(robot.x + cos(new_direction_angle), robot.y + sin(new_direction_angle))
+        robot = new_position
 
+        fail = False
         # Check if a colission has been ocurred
-        for o in obstacles + [left, right]:
-            if robot.distance_and_angle(o)[0] <= 0:
-                write(f"FAIL!!!!!!!!!!!!!. Object: ({o.center.x, o.center.y}): {o.radius}\n\n\n\n")
-                return "fail"
+        for o in obstacles:
+            fail |= robot.is_inside_of(o)
+        fail |= robot.x >= RIGHT or  robot.x <= LEFT
+        if fail:
+            write(f"FAIL!!!!!!!!!!!!!. Object: {o}\n\n\n\n")
+            return "fail"
 
         # remove passed objects
         new_obstacles = []
         for o in obstacles:
-            if o.center.y >= robot.center.y:
+            if o.upper_left.y >= robot.y:
                 new_obstacles.append(o)
         obstacles = new_obstacles
 
@@ -114,12 +128,13 @@ def set_obstacles():
     no_obstacles = 10
     write(f"Obstacles:\n")
     for _ in range (no_obstacles):
+        w = random.randint(3, 10)
+        h = random.randint(3, 10)
         x = random.randint(LEFT, RIGHT)
         y = random.randint(START, FINISH)
-        radius=random.randint(2, 5)
-        write(f"({x}, {y}): {radius}\n")
-        c = Circle(center=Point(x, y), radius=radius)
-        obstacles.append(c)
+        r = Rectangle(Point(x, y), w, h)
+        write(f"{r}\n")
+        obstacles.append(r)
     write('\n\n')
     return obstacles
 
@@ -132,12 +147,11 @@ def perform_simulations(no_simulations):
     for i in range(no_simulations):
         print(f"Simulation #{i}\n")
         write(f"\n\n--------------------------Simulation #{i}-------------------\n\n")
-        start_point = Point(LEFT + RIGHT / 2, 0)
         obstacles = set_obstacles()
         for im in inference_methods:
             for dm in defuzzification_methods:
                 write(f'{im}, {dm}\n')
-                robot = Circle(center=start_point, radius=ROBOT_SIZE)
+                robot = Point((LEFT+RIGHT)/2, 0)
                 obstacles_copy = list(obstacles)
                 result = simulate(robot, obstacles_copy, inference_method=im, defuzzification_method=dm)
                 if result == "fail":
