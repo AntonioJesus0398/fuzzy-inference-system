@@ -47,6 +47,8 @@ class Circle:
             x = 180 - x
         return d, x
 
+
+
 LEFT = 0
 RIGHT = 60
 START = 25
@@ -135,7 +137,6 @@ def perform_simulations(no_simulations):
         for im in inference_methods:
             for dm in defuzzification_methods:
                 write(f'{im}, {dm}\n')
-                results[im, dm] = 0
                 robot = Circle(center=start_point, radius=ROBOT_SIZE)
                 obstacles_copy = list(obstacles)
                 result = simulate(robot, obstacles_copy, inference_method=im, defuzzification_method=dm)
