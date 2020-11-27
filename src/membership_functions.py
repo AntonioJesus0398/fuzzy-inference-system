@@ -32,6 +32,16 @@ def triangular(a1, a2, a3):
         return 0
     return f
 
+def rect(a1, a2, monotony='asc'):
+    @membership_function
+    def f(x):
+        if monotony == 'asc' and x >= a1 and x <= a2:
+            return (x - a1) / (a2 - a1)
+        if monotony == 'desc' and x >= a1 and x <= a2:
+            return (a2 - x) / (a2 - a1)
+        return 0
+    return f
+
 def trapezoidal(a1, a2, a3, a4):
     @membership_function
     def f(x):

@@ -1,4 +1,4 @@
-from src.membership_functions import triangular, trapezoidal, singleton
+from src.membership_functions import triangular, trapezoidal, singleton, rect
 from numpy import arange
 import matplotlib.pyplot as plt
 
@@ -41,9 +41,13 @@ class LinguisticVariable:
     def build_triangular(self, a1, a2, a3):
         return FuzzySet(membership_function=triangular(self.discretize(a1), self.discretize(a2), self.discretize(a3)), domain=self.domain)
 
+    def build_rect(self, a1, a2, monotony):
+        return FuzzySet(membership_function=rect(self.discretize(a1), self.discretize(a2), monotony=monotony), domain=self.domain)
+
     def build_trapezoidal(self, a1, a2, a3, a4):
         return FuzzySet(membership_function=trapezoidal(self.discretize(a1), self.discretize(a2), self.discretize(a3), self.discretize(a4)), domain=self.domain)
 
+    
     def add_term(self, name, fz):
         self.terms[name] = fz
 

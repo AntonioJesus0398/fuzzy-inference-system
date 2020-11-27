@@ -6,18 +6,18 @@ from src.fuzzy_inference_system import FuzzyInferenceSystem
 Angle = LinguisticVariable(name='angle', domain=(0, 180), no_levels=30)
 Angle.add_term('right-large', Angle.build_triangular(-1, 0, 45))
 Angle.add_term('right-medium', Angle.build_triangular(30, 45, 60))
-Angle.add_term('right-small', Angle.build_triangular(45, 67.5, 90))
-Angle.add_term('zero-angle', Angle.build_singleton(90))
-Angle.add_term('left-small', Angle.build_triangular(90, 112.5, 135))
+Angle.add_term('right-small', Angle.build_rect(45, 90, 'asc'))
+Angle.add_term('zero-angle', Angle.build_triangular(80, 90, 100))
+Angle.add_term('left-small', Angle.build_rect(90, 135, 'desc'))
 Angle.add_term('left-medium', Angle.build_triangular(120, 135, 150))
 Angle.add_term('left-large', Angle.build_triangular(135, 180, 181))
 
 Direction = LinguisticVariable(name='direction', domain=(0, 180), no_levels=30)
 Direction.add_term('right-sharp', Direction.build_triangular(-1, 0, 45))
 Direction.add_term('right-medium', Direction.build_triangular(30, 45, 60))
-Direction.add_term('right-mild', Direction.build_triangular(45, 67.5, 90))
-Direction.add_term('zero-turn', Direction.build_singleton(90,))
-Direction.add_term('left-mild', Direction.build_triangular(90, 112.5, 135))
+Direction.add_term('right-mild', Direction.build_rect(45, 90, 'asc'))
+Direction.add_term('zero-turn', Direction.build_triangular(80, 90, 100))
+Direction.add_term('left-mild', Direction.build_rect(90, 135, 'desc'))
 Direction.add_term('left-medium', Direction.build_triangular(120, 135, 150))
 Direction.add_term('left-sharp', Direction.build_triangular(135, 180, 181))
 
@@ -29,9 +29,9 @@ Distance.add_term('far', Distance.build_triangular(30, 45, 60))
 Distance.add_term('pretty-far', Distance.build_triangular(45, 100, 101))
 
 # uncomment this lines to plot the variables
-# Distance.plot()
-# Angle.plot()
-# Direction.plot()
+Distance.plot()
+Angle.plot()
+Direction.plot()
 
 rule_base = FuzzyRuleBase(state_variables=[Distance, Angle], control_variables=[Direction])
 
@@ -49,6 +49,10 @@ space_partition = {
     ('near', 'zero-angle'): 'right-sharp',
     ('near', 'left-small'): 'right-sharp',
     ('near', 'left-medium'): 'right-mild',
+    ('near', 'left-large'): 'right-mild',
+    ('near', 'right-large'): 'left-mild',
+    ('pretty-near', 'right-large'): 'left-medium',
+    ('pretty-near', 'left-large'): 'right-medium',
     ('pretty-near', 'right-medium'): 'left-medium',
     ('pretty-near', 'right-small'): 'left-sharp',
     ('pretty-near', 'zero-angle'): 'right-sharp',
