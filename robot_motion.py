@@ -4,29 +4,29 @@ from src.fuzzy_inference_system import FuzzyInferenceSystem
 
 
 Angle = LinguisticVariable(name='angle', domain=(0, 180), no_levels=30)
-Angle.add_term('right-large', Angle.build_triangular(-1, 0, 45))
+Angle.add_term('right-large', Angle.build_rect(0, 45, 'desc'))
 Angle.add_term('right-medium', Angle.build_triangular(30, 45, 60))
 Angle.add_term('right-small', Angle.build_rect(45, 90, 'asc'))
 Angle.add_term('zero-angle', Angle.build_triangular(80, 90, 100))
 Angle.add_term('left-small', Angle.build_rect(90, 135, 'desc'))
 Angle.add_term('left-medium', Angle.build_triangular(120, 135, 150))
-Angle.add_term('left-large', Angle.build_triangular(135, 180, 181))
+Angle.add_term('left-large', Angle.build_rect(135, 180, 'asc'))
 
 Direction = LinguisticVariable(name='direction', domain=(0, 180), no_levels=30)
-Direction.add_term('right-sharp', Direction.build_triangular(-1, 0, 45))
+Direction.add_term('right-sharp', Direction.build_rect(0, 45, 'desc'))
 Direction.add_term('right-medium', Direction.build_triangular(30, 45, 60))
 Direction.add_term('right-mild', Direction.build_rect(45, 90, 'asc'))
 Direction.add_term('zero-turn', Direction.build_triangular(80, 90, 100))
 Direction.add_term('left-mild', Direction.build_rect(90, 135, 'desc'))
 Direction.add_term('left-medium', Direction.build_triangular(120, 135, 150))
-Direction.add_term('left-sharp', Direction.build_triangular(135, 180, 181))
+Direction.add_term('left-sharp', Direction.build_rect(135, 180, 'asc'))
 
 Distance = LinguisticVariable(name='distance', domain=(0, 100), no_levels=20)
-Distance.add_term('pretty-near', Distance.build_triangular(-1, 0 , 15))
+Distance.add_term('pretty-near', Distance.build_rect(0 , 15, 'desc'))
 Distance.add_term('near', Distance.build_triangular(0, 15, 30))
 Distance.add_term('little-far', Distance.build_triangular(15, 30, 45))
 Distance.add_term('far', Distance.build_triangular(30, 45, 60))
-Distance.add_term('pretty-far', Distance.build_triangular(45, 100, 101))
+Distance.add_term('pretty-far', Distance.build_rect(45, 100, 'asc'))
 
 # uncomment this lines to plot the variables
 Distance.plot()
