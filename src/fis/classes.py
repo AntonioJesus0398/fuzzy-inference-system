@@ -1,4 +1,4 @@
-from src.membership_functions import triangular, trapezoidal, singleton, rect
+from .membership_functions import triangular, trapezoidal, singleton, rect
 from numpy import arange
 import matplotlib.pyplot as plt
 
