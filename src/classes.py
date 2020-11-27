@@ -22,18 +22,18 @@ class LinguisticVariable:
         if value < left or value > right:
             return value
 
-        x = value // self.step_size
-        y = x + 1
+        x = left
+        previous = left
+        while x < value:
+            previous = x
+            x += self.step_size
 
-        _x = left + x * self.step_size
-        _y = left + y * self.step_size
-
-        d1 = abs(value - _x)
-        d2 = abs(value - _y)
+        d1 = abs(value - x)
+        d2 = abs(value - previous)
 
         if d1 < d2:
-            return _x
-        return _y
+            return x
+        return previous
 
     def build_singleton(self, v):
         return FuzzySet(membership_function=singleton(self.discretize(v)), domain=self.domain)
