@@ -1,19 +1,4 @@
 %===================================================================================
-% JORNADA CIENTÍFICA ESTUDIANTIL - MATCOM, UH
-%===================================================================================
-% Esta plantilla ha sido diseñada para ser usada en los artículos de la
-% Jornada Científica Estudiantil, MatCom.
-%
-% Por favor, siga las instrucciones de esta plantilla y rellene en las secciones
-% correspondientes.
-%
-% NOTA: Necesitará el archivo 'jcematcom.sty' en la misma carpeta donde esté este
-%       archivo para poder utilizar esta plantila.
-%===================================================================================
-
-
-
-%===================================================================================
 % PREÁMBULO
 %-----------------------------------------------------------------------------------
 \documentclass[a4paper,10pt]{article}
@@ -29,6 +14,7 @@
 \usepackage{listings}
 \usepackage[pdftex]{hyperref}
 \usepackage{array}
+
 %-----------------------------------------------------------------------------------
 % Configuración
 %-----------------------------------------------------------------------------------
@@ -39,7 +25,6 @@
 	    urlcolor=blue}
 
 %===================================================================================
-
 
 
 %===================================================================================
@@ -56,27 +41,11 @@
 \name Antonio Jesús Otaño Barrera \email \href{mailto:a.otano@estudiantes.matcom.uh.cu}{a.otano@estudiantes.matcom.uh.cu}
 	\\ \addr Grupo C411}
 
-%-----------------------------------------------------------------------------------
-% Headings
-%-----------------------------------------------------------------------------------
-%\jcematcomheading{\the\year}{1-\pageref{end}}{A. Uno, A. Dos}
-
-%-----------------------------------------------------------------------------------
-%\ShortHeadings{Ejemplo JCE}{Autores}
-%===================================================================================
-
-
 
 %===================================================================================
 % DOCUMENTO
 %-----------------------------------------------------------------------------------
 \begin{document}
-
-%-----------------------------------------------------------------------------------
-% NO BORRAR ESTA LINEA!
-%-----------------------------------------------------------------------------------
-%\twocolumn[
-%-----------------------------------------------------------------------------------
 
 \maketitle
 
@@ -86,134 +55,103 @@
 \selectlanguage{spanish} % Para producir el documento en Español
 
 
-%-----------------------------------------------------------------------------------
-% NO BORRAR ESTAS LINEAS!
-%-----------------------------------------------------------------------------------
-%\vspace{0.8cm}
-%]
-%-----------------------------------------------------------------------------------
-
-
 %===================================================================================
 
 
-\section{Características del sistema de inferencia propuesto}\label{sec:1}
+\section{Características del sistema de inferencia propuesto}\label{sec:0}
 %---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
   \paragraph{} El sistema de inferencia propuesto acepta reglas con  múltiples variables de entrada y múltiples variables de salida. Las variables
-  en la entrada pueden ser tanto valores (singleton) como conjuntos difusos. El sistema permite trabajar con funciones de membresía
-  de cualquier tipo definidas por el usuario, y además brinda herramientas para facilitar el uso de funciones membresía de tipo singleton, triangular
-  y trapezoidal. Los métodos de inferencia que tiene implementados son los de Mamdani y Larsen, y los métodos de desdifusificación que
+  en la entrada pueden ser tanto valores (singleton) como conjuntos difusos. El sistema permite trabajar con funciones de membresía triangulares,
+  trapezoidales, singleton, y rectas. Los métodos de inferencia que tiene implementados son los de Mamdani y Larsen, y los métodos de desdifusificación que
   brinda son los de Centroide (Center of Area), Bisección (Bisector of Area), y Media de los Máximos (Mean of Maximum).
 
 %===================================================================================
 
-\section{Principales ideas seguidas para la implementación del sistema}\label{sec:2}
+\section{Principales ideas seguidas para la implementación del sistema}\label{sec:1}
 %---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-  \paragraph{} El sistema fue implementado en Python y consiste en una librería que permite a cualquier otro programador usarla para
-  resolver (siempre y cuando esté bien modelado) cualquier problema cuya solución se obtenga mediante inferencia difusa. El programador
-  puede escoger el método de inferencia y el método de desdifusificación que más se ajuste al problema con que está tratando. Además, dado que
-  el universo de discusión del problema puede ser continuo es necesario discretizar las funciones de membresía provistas por el usuario
-  para poder efectuar tanto los métodos de inferencia como los de desdifusificación. La discretización que se realiza es uniforme y es tarea del
-  programador definir el número de segmentos o niveles en que se divide el universo del problema original. También se puede proveer al sistema de
-  una función para normalizar la entrada en un determinado rango. El sistema trabaja con cuatro entidades fundamentales: conjuntos difusos, variables
-  linguísticas, reglas difusas y bases de reglas difusas. Estas entidades a su vez deben ser usadas por el programador para modelar su problema. Internamente solo
-  se trabaja con reglas de tipo MISO (multiple input single output), pero como toda regla MIMO (multiple input multiple output) puede ser transformada en una conju
-  nto de reglas de tipo MISO, se brinda una interfaz para modelar el problema con reglas MIMO, las cuales se descomponen internamente en varias reglas de tipo MISO.   
-
+	\paragraph{} El sistema fue implementado en Python y consiste en una librería que permite a cualquier otro programador usarla para
+	resolver (siempre y cuando esté bien modelado) cualquier problema cuya solución se obtenga mediante inferencia difusa. El programador
+	puede escoger el método de inferencia y el método de desdifusificación que más se ajuste al problema con que está tratando. Dado que el dominio de las variables 			linguísticas puede ser un conjunto continuo es necesario particionar el mismo en un número finito de segmentos o niveles para poder llevar a cabo los métodos de 				inferencia y desdifusificación. La discretización que se realiza es uniforme sobre todo el dominio  y es tarea del programador definir el número de segmentos o niveles en 		que se divide el mismo.  La implementación del sistema utiliza  cuatro entidades	fundamentales: conjuntos difusos, variables  linguísticas, reglas difusas y bases de reglas 		difusas. Las variables linguísticas son representadas con un dominio y un conjunto de términos en forma de conjuntos difusos cuyo dominio es el mismo que el de la 			variable y cuya función de membresía es decidida por el programador entre los posibles tipos explicados en la sección \ref{sec:0}. Por otro lado, las reglas difusas constan 		de un antecedente y un consequente; cada uno es una lista de pares (variable, término). Las bases de reglas difusas guardan un conjunto de reglas difusas, que sólo son 		de tipo MISO (múltiples entradas y una única salida). Para manejar las variables de tipo MIMO (múltiples entradas y múltiples salidas) se procede convirtiéndolas en 			múltiples reglas de tipo MISO, una por cada variable de control. Los métodos de agregación reciben como entrada una lista de conjuntos difusos que representan los 			valores que toman las variables de estado y devuelven una lista de conjuntos difusos que representan a las variables de control. Si la entrada consiste de valores simples 		entonces es necesario convertirla en conjuntos difusos de tipo singleton. A manera de ejemplo, si la entrada es el valor puntual $x_{0}$ entonces necesita ser 					transformado como se muestra en la figura \ref{fig:fuzzification}:
+	
+	\begin{figure}[h]
+		\begin{center}		
+			\includegraphics[width=200px, height=200px]{images/fuzzification.jpg}
+		\end{center}
+		\caption{Método de fusificación.\label{fig:fuzzification}}%
+	\end{figure}
+	
+	Los métodos de desdifusificación se encargan de convertir los conjuntos difusos que devuuelven los métodos de agregación en valores puntuales. Como se dijo en la sección \ref{sec:0} hay tres variantes de desdifusificación: Centroide, Bisección y Media de los máximos. En el caso del Método de Bisección, se utiliza el Método de los Trapecios como método de integración.
 %===================================================================================
 
 \section{Propuesta de problema a solucionar mediante inferencia difusa}\label{sec:3}
 %---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-  \paragraph{}   El problema propuesto consiste en simular el movimiento de un robot sobre un espacio en el que existen obstaculos.
+  \paragraph{}   El problema propuesto consiste en simular el movimiento de un robot sobre un pasillo en el que existen obstáculos.
   El robot tiene sensores que le permiten detectar la distancia a la que se encuentra del objeto más cercano así como el ángulo que forma
-  con el mismo. Conocidos estos parámetros el robot debe determinar que dirección tomar para evitar chocar con el obstáculo (Figura \ref{fig:problem})
-  
-	\begin{figure}[htb]%
+  con el mismo. Conocidos estos parámetros el robot debe determinar que dirección tomar para evitar chocar con el obstáculo. Las siguientes reglas definen en detalle el 		  problema.
+	\begin{enumerate}
+	\item{La distancia se mide en metros y los ángulos en grados sexagesimales}
+	\item{Los obstáculos tienen forma rectangular y sus lados varian entre 5 y 10 metros}
+	\item{El robot es un punto en el espacio que se desplaza un metro de distancia por cada unidad de tiempo}
+	\item{El pasillo constituye un rectángulo de ancho 60 y alto 100}
+	\item{El robot concluye existosamente su tarea si llega al final del pasillo sin chocar con ningún obstáculo}
+	\item{Las paredes del pasillo también constituyen obstáculos}
+	\item{El robot comienza en la posición (30, 0)}
+	\item{Los obstáculos están situados aleatoriamente en los últimos 70 metros del pasillo}
+	\item{El total de objetos en el pasillo siempre será 5}
+	\item{Para medir la distancia y el ángulo con respecto al obstáculo tomamos como referencia el punto más cercano del obstáculo al robot (Figura \ref{fig:distance_angle})}
+	\end{enumerate}
+	 
+	 \begin{figure}[h]
 		\begin{center}
-			\setlength\fboxsep{0pt}
-			\setlength\fboxrule{1.5pt}
-			\fbox{\includegraphics[width=200px, height=200px]{images/problem_description.jpg}}
+			\includegraphics[width=200px, height=200px]{images/distance_angle.jpg}
 		\end{center}
-		\caption{Descripción del problema \label{fig:problem}}%
+		\caption{Ejemplos de cómo se determina la distancia y el ángulo respecto a un obstáculo \label{fig:distance_angle}}%
 	\end{figure}
 
 \subsection{Variables linguísticas definidas}\label{sub:variables}
 \paragraph{}A partir del enunciado anterior podemos definir tres variables lingüisticas que nos permitirán modelar el problema, como se muestra en la Tabla \ref{tab:lv}.
 
-\begin{table}[htb]%
+
+
+
+\subsection{Selección de las funciones de membresía}\label{sub:membership_functions}
+	\paragraph{} En las figuras \ref{fig:distance_plot}, \ref{fig:angle_plot} y \ref{fig:direction_plot} se muestran las funciones de membresía asignadas a los términos de las variables Distancia, Ángulo y Dirección respectivamente.
+	   
+	\begin{figure}[p]
+		\begin{center}
+			\includegraphics[width=400px, height=200px]{images/distance_plot.jpg}
+		\end{center}
+		\caption{Distancia \label{fig:distance_plot}}%
+	\end{figure}	
+	\begin{figure}[p]
+		\begin{center}
+			\includegraphics[width=400px, height=200px]{images/angle_plot.jpg}
+		\end{center}
+		\caption{Ángulo \label{fig:angle_plot}}%
+	\end{figure}	
+	\begin{figure}[p]
+		\begin{center}
+			\includegraphics[width=400px, height=200px]{images/direction_plot.jpg}
+		\end{center}
+		\caption{Dirección \label{fig:direction_plot}}%
+	\end{figure}
+	
+	
+\begin{table}
 	\begin{center}
-		 \begin{tabular}{| c | c | c |p{3.5cm}| p{2cm} | p{2.5cm} |}
+		 \begin{tabular}{| c | c | c |p{3.5cm}|}
 			  \hline
-			    Variable & Tipo & Dominio & Términos & No. segmentos & Ecuacion de normalización \\ \hline
-			    Distancia & Estado & [0, 100] & muy cerca (PN), \newline cerca (N), \newline un poco lejos (LF), \newline lejos (F), \newline muy lejos (PF) & 100 &  $$ d' = \frac{d}{100} $$ \\ \hline
-			    Ángulo & Estado & [0, 180] & der-grande (RL), \newline der-mediano (RM), \newline der-pequeño (RS), \newline nulo (Z), \newline izq-pequeño (LS), \newline 					izq-mediano (LM), \newline izq-grande (LL) & 180 &  $$a' = \frac{a}{180}$$ \\ \hline
-			    Dirección & Control & [0, 180] & izq-cerrado (LS), \newline izq-moderado (LME), \newline izq-leve (LMI), \newline recto (ZT), \newline der-leve (RMI), \newline 				der-moderado (RME), \newline der-cerrado (RS) & 180 & $$ v' = \frac{v}{180} $$ \\ \hline
+			    Variable & Tipo & Dominio & Términos  \\ \hline
+			    Distancia & Estado & [0, 100] & muy cerca (PN), \newline cerca (N), \newline un poco lejos (LF), \newline lejos (F), \newline muy lejos (PF)  \\ \hline
+			    Ángulo & Estado & [0, 180] & der-grande (RL), \newline der-mediano (RM), \newline der-pequeño (RS), \newline nulo (Z), \newline izq-pequeño (LS), \newline 					izq-mediano (LM), \newline izq-grande (LL)  \\ \hline
+			    Dirección & Control & [0, 180] & izq-cerrado (LS), \newline izq-moderado (LME), \newline izq-leve (LMI), \newline recto (ZT), \newline der-leve (RMI), \newline 				der-moderado (RME), \newline der-cerrado (RS) \\ \hline
 		  \end{tabular}		  
 		  \caption{Variables lingüisticas del problema  \label{tab:lv}}%		 
 	\end{center}
 \end{table}
-
-\subsection{Método de fusificación empleado}\label{sub:fuzzification}
-\paragraph{} No existe incertidumbre en los datos pero como los metodos de inferencia reciben conjuntos difusos como entrada debemos convertir cada valor
-en un conjunto difuso de tipo singleton, como se muestra en la figura \ref{fig:fuzzification}.
-
-\begin{figure}[htb]%
-	\begin{center}		
-		\includegraphics[width=200px, height=200px]{images/fuzzification.jpg}
-	\end{center}
-	\caption{Método de fusificación.\label{fig:fuzzification}}%
-\end{figure}
-
-
-\subsection{Selección de las funciones de membresía}\label{sub:membership_functions}
-	\paragraph{} Las funciones de membresía utilizadas fueron en su mayoria triangulares, excpeto para los términos nulo y recto correspondientes
-	a las variables ángulo y dirección respectivamente que están representados por conjuntos singleton. Dada la naturaleza discreta de las computadoras y que las funciones 		de membresía de los  conjuntos singleton tienen un solo valor distinto de 0 en todo su dominio, puede no alcanzarse los resultados esperados si las funciones las 				implementamos exactamente como están definidas. En su lugar aplicamos una transformación. La función:
-
-	\begin{equation}
-		\label{eq:singleton}
-		f(x) = \left\{
-		\begin{array}{lc}
-			1 & \mathrm{si\ } x = a \\
-			0 & e.o.c \\
-		\end{array}
-		\right.
-	\end{equation},   
-	la transformamos en:
-	   
-	\begin{equation}
-		\label{eq:trapezoidal}
-		f(x) = \left\{
-			\begin{array}{lc}
-			 	1 & \mathrm{si\ } x \in  [a - \frac{\epsilon}{2}, b + \frac{\epsilon}{2}] \\
-			 	0 & e.o.c \\
-		      \end{array}
-		     \right.
-	\end{equation},   
-	donde $\epsilon$ es el tamaño de un segmento o nivel de la variable.
-	   
-	\begin{figure}[htb]%
-		\begin{center}
-			\includegraphics[width=200px, height=200px]{images/distance_plot.jpg}
-		\end{center}
-		\caption{Distancia \label{fig:distance_plot}}%
-	\end{figure}
-	
-	\begin{figure}[htb]%
-		\begin{center}
-			\includegraphics[width=200px, height=200px]{images/angle_plot.jpg}
-		\end{center}
-		\caption{Ángulo \label{fig:angle_plot}}%
-	\end{figure}
-	
-	\begin{figure}[htb]%
-		\begin{center}
-			\includegraphics[width=200px, height=200px]{images/direction_plot.jpg}
-		\end{center}
-		\caption{Dirección \label{fig:direction_plot}}%
-	\end{figure}
 
 \subsection{Construccion de la base de reglas difusas}\label{sub:fuzzy_rule_base}
 	\paragraph{} Para representar el conocimiento  utilizamos reglas difusas de la forma:
@@ -222,155 +160,20 @@ en un conjunto difuso de tipo singleton, como se muestra en la figura \ref{fig:f
 		``Si la distancia es $A_{i}$ y el ángulo es $B_{i}$, entonces la direccion es $C_{i}$.''
 	\end{quote}
 	
-		A partir de un análisis detallado del problema se pudo construir el siguiente conjunto de reglas difusas representado en la Figura \ref{fig:fuzzy_rule_base}.
+		A partir de un análisis detallado del problema se pudo construir el conjunto de reglas difusas representado en la Figura \ref{fig:rules}.
 	Para leer una regla escogemos una fila para la distancia y una columna para el ángulo y la intersección es la dirección. Por ejemplo, si la distancia es cerca(N) y el ángulo 		es pequeño a la derecha (RS) entonces la direccion que debemos tomar es doblando a la izquierda cerrado (LS). 
 	
-	\begin{figure}[htb]%
+	\begin{figure}[!h]
 		\begin{center}
-			\includegraphics[width=200px, height=200px]{images/fuzzy_rule_base.jpg}
+			\includegraphics[width=250px, height=200px]{images/rules.jpg}
 		\end{center}
-		\caption{Base de reglas difusas \label{fig:fuzzy_rule_base}}%
-	\end{figure}
-	
-	\begin{figure}[htb]%
-		\begin{center}
-			\includegraphics[width=200px, height=300px]{images/terms_legend.jpg}
-		\end{center}
-		\caption{Leyenda \label{fig:terms_legend}}%
+		\caption{Base de reglas difusas \label{fig:rules}}
 	\end{figure}
 	
 	
-	
+\section{Consideraciones obtenidas a partir de la solución del problema con el sistema de inferencia implementado}\label{sec:4}	
 
-%===================================================================================
-
-
-
-
-%-----------------------------------------------------------------------------------
-	\subsection{Listas y Descripciones}\label{sub:lists}
-%-----------------------------------------------------------------------------------
-		Para producir listas enumeradas, use el siguiente estilo:
-
-%-----------------------------------------------------------------------------------
-		\begin{enumerate}
-			\item Primer Elemento
-			\item Segundo Elemento
-			%
-			\begin {enumerate}
-				\item {Segundo Elemento - Subitem Uno}
-				\item {Segundo Elemento - Subitem Dos}
-			\end {enumerate}
-			%
-		\end{enumerate}
-
-%-----------------------------------------------------------------------------------
-		Para producir descripciones, use el siguiente estilo:
-
-%-----------------------------------------------------------------------------------
-		\begin{description}
-			\item [Primer Elemento] con su respectiva descripción.
-			\item [Segundo Elemento] también con su respectiva descripción.
-		\end{description}
-
-%-----------------------------------------------------------------------------------
-	\subsection{Figuras}\label{sub:figures}
-	
-
-%-----------------------------------------------------------------------------------
-		Para producir cuerpos flotantes (figuras ó tablas), asegúrese de numerar
-		y etiquetar correctamente cada figura. Las referencias a las figuras deben
-		estar también correctamente etiquetadas. Por ejemplo, en la Fig. \ref{fig:arr}
-		se muestra\ldots.
-
-		\begin{figure}[htb]%
-		\begin{center}
-		\includegraphics[width=200px, height=200px]{images/problem_description.jpg}
-		\end{center}
-		\caption{Descripción del problema \label{fig:arr}}%
-		\end{figure}
-
-%-----------------------------------------------------------------------------------
-	\subsection{Código Fuente}\label{sub:listings}
-%-----------------------------------------------------------------------------------
-		Para producir código fuente, envuélvalo en una figura flotante y
-		etiquételo correctamente. Por ejemplo, en la Fig. \ref{fig:code}
-		se muestra un código bastante conocido\ldots.
-
-		% Configuración de Listings
-		\lstset{keywordstyle=\color{blue}, basicstyle=\small}
-
-		\begin{figure}[htb]%
-			\begin{lstlisting}[language=c]%
-
-    int main(int argc, char** argv)
-    {
-        // Imprimiendo "Hola Mundo".
-        printf("Hello, World");
-    }
-
-			\end{lstlisting}
-		\caption{Código fuente de ejemplo.\label{fig:code}}
-		\end{figure}
-
-%-----------------------------------------------------------------------------------
-	\subsection{Referencias}
-%-----------------------------------------------------------------------------------
-  	Las referencias deben estar agrupadas en una sección al final del artículo,
-  	y las citas numeradas correctamente, por ejemplo \cite{knuth} ó \cite{goedel}.
-  	Incluya toda la información importante de cada referencia, incluídos autor,
-  	título, y notas de la edición. En caso de citar sitios web, además
-  	de la URL, incluya la fecha en que fue consultado, como en \cite{wiki}.
-
-%===================================================================================
-
-
-
-%===================================================================================
-% Conclusiones
-%-----------------------------------------------------------------------------------
-\section{Conclusiones}\label{sec:conc}
-
-  En esta sección puede incluir las conclusiones de su investigación y las ideas
-  sobre la continuidad del trabajo, en el caso que aplique.
-
-%===================================================================================
-
-
-
-%===================================================================================
-% Recomendaciones
-%-----------------------------------------------------------------------------------
-\section{Recomendaciones}\label{sec:rec}
-
-  En esta sección puede incluir recomendaciones sobre posibles formas de continuar
-  la investigación u otros temas relacionados.
-
-%===================================================================================
-
-
-
-%===================================================================================
-% Bibliografía
-%-----------------------------------------------------------------------------------
-\begin{thebibliography}{99}
-%-----------------------------------------------------------------------------------
-	\bibitem{knuth} Donald E. Knuth. \emph{The Art of Computer Programming}.
-		Volume 1: Fundamental Algorithms (3rd~edition), 1997.
-		Addison-Wesley Professional.
-
-	\bibitem{goedel} Kurt Göedel. \emph{Über formal unentscheidbare Sätze der
-		Principia Mathematica und verwandter Systeme, I}.
-		Monatshefte für Mathematik und Physik 38.
-
-	\bibitem{wiki} Wikipedia. URL: \href{http://en.wikipedia.org}
-	  {http://en.wikipedia.org}.
-		Consultado en \today.
-
-%-----------------------------------------------------------------------------------
-\end{thebibliography}
-
-%-----------------------------------------------------------------------------------
+	Fue necesario encontrar un número adecuado de segmentos en los que dividir el dominio de las variables para obtener un balance entre calidad y rapidez. Los mejores parámetros encontrados fueron de 20 para la distancia y 30 para la dirección y el ángulo. El método de desdifusificación de Media de los Máximos fue descartado desde el comienzo al no brindar resultados satisfactorios. Se realizaron un total de 30 simulaciones con las combinaciones de Larsen y Centroide, Larsen y Bisección, Mamdani y Centroide y Mamdani y Centroide, pasando todas las pruebas con éxito.
 
 \label{end}
 

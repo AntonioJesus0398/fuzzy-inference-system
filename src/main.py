@@ -24,7 +24,7 @@ while True:
             print("El ángulo debe ser un número entre 0 y 180")
             continue
 
-    result = FIS.solve([('distance', Distance.build_singleton(distance)), ('angle', Angle.build_singleton(angle))], defuzzification_method="coa")
+    result = FIS.solve([('distance', Distance.build_singleton(distance)), ('angle', Angle.build_singleton(angle))], defuzzification_method="mom")
     print(f"El ángulo de la dirección que debe tomar el robot es: {result['direction']}")
 
     while True:

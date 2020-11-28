@@ -38,27 +38,33 @@ class Point:
         return d, x
 
     def is_inside_of(self, rectangle):
-        return self.x >= rectangle.upper_left.x and self.x <= rectangle.upper_right.x and self.y >= rectangle.mid_down.y and self.y <= rectangle.upper_right.y
+        return self.x >= rectangle.left and self.x <= rectangle.right and self.y >= rectangle.down and self.y <= rectangle.up
 
     def distance_to_rectangle(self, rect):
-        if self.y < rect.mid_down.y:
-            return self.distance_to_point(rect.mid_down)
-        if self.x < rect.upper_left.x:
-            return self.distance_to_point(rect.upper_left)
-        if self.x > rect.upper_right.x:
-            return self.distance_to_point(rect.upper_right)
-        return 0, None
+        assert self.y <= rect.up and not self.is_inside_of(rect)
+        x, y = self.x, self.y
+        if y < rect.down:
+            if x < rect.left:
+                return self.distance_to_point(Point(rect.left, rect.down))
+            if x > rect.right:
+                return self.distance_to_point(Point(rect.right, rect.down))
+            return self.distance_to_point(Point(x, rect.down))
+        if x < rect.left:
+            return self.distance_to_point(Point(rect.left, y))
+        return self.distance_to_point(Point(rect.right, y))
+
 
 class Rectangle:
-    def __init__(self, upper_left, width, height):
-        self.upper_left = upper_left
-        self.upper_right = Point(upper_left.x + width, upper_left.y)
-        self.mid_down = Point(upper_left.x + width/2, upper_left.y - height)
+    def __init__(self, bottom_left, width, height):
+        self.left = bottom_left.x
+        self.right = bottom_left.x + width
+        self.down = bottom_left.y
+        self.up = bottom_left.y + height
         self.width = width
         self.height = height
 
     def __repr__(self):
-        x, y = self.upper_left.x, self.upper_left.y
+        x, y = self.left, self.down
         w, h = self.width, self.height
         return f'({x}, {y}): {w} X {h}'
 
@@ -100,6 +106,7 @@ def simulate(robot, obstacles, inference_method, defuzzification_method):
         except ZeroDivisionError:
             print(shortest_distance, angle)
             exit(1)
+
         write(f"direction: {new_direction_angle}\n")
         new_position = Point(robot.x + cos(new_direction_angle), robot.y + sin(new_direction_angle))
         robot = new_position
@@ -116,7 +123,7 @@ def simulate(robot, obstacles, inference_method, defuzzification_method):
         # remove passed objects
         new_obstacles = []
         for o in obstacles:
-            if o.upper_left.y >= robot.y:
+            if o.up >= robot.y:
                 new_obstacles.append(o)
         obstacles = new_obstacles
 
@@ -125,13 +132,13 @@ def simulate(robot, obstacles, inference_method, defuzzification_method):
 
 def set_obstacles():
     obstacles = []
-    no_obstacles = 10
+    no_obstacles = 5
     write(f"Obstacles:\n")
     for _ in range (no_obstacles):
-        w = random.randint(3, 10)
-        h = random.randint(3, 10)
-        x = random.randint(LEFT, RIGHT)
-        y = random.randint(START, FINISH)
+        w = random.randint(5, 10)
+        h = random.randint(5, 10)
+        x = random.randint(LEFT, RIGHT - w)
+        y = random.randint(START, FINISH - h)
         r = Rectangle(Point(x, y), w, h)
         write(f"{r}\n")
         obstacles.append(r)
@@ -162,5 +169,5 @@ def perform_simulations(no_simulations):
     return results
 
 
-results = perform_simulations(10)
+results = perform_simulations(30)
 print(results)
