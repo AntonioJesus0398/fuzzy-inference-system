@@ -24,8 +24,6 @@
 	    linkcolor=black,%
 	    urlcolor=blue}
 
-%===================================================================================
-
 
 %===================================================================================
 % Presentacion
@@ -175,9 +173,28 @@
 
 	Fue necesario encontrar un número adecuado de segmentos en los que dividir el dominio de las variables para obtener un balance entre calidad y rapidez. Los mejores parámetros encontrados fueron de 20 para la distancia y 30 para la dirección y el ángulo. El método de desdifusificación de Media de los Máximos fue descartado desde el comienzo al no brindar resultados satisfactorios. Se realizaron un total de 30 simulaciones con las combinaciones de Larsen y Centroide, Larsen y Bisección, Mamdani y Centroide y Mamdani y Centroide, pasando todas las pruebas con éxito.
 
+
+\section{Sobre la estructura del proyecto}\label{sec:5}
+	La implementación consta de dos partes:
+	\begin{enumerate}
+	\item{La implementación del sistema de inferencia, localizada en el directorio \emph{/src/fis}. La misma consta de los siguientes módulos:
+	\begin{description}
+		\item[classes.py] Definición de las clases que representan las variables linguísticas, conjuntos difusos, reglas y bases de reglas difusas.
+		\item[defuzzification.py] Métodos de desfusificación (Centroide, Bisección y Media de los Máximos)
+		\item[fuzzy\_inference\_system.py] Provee la interfaz necesaria para trabajar con el sistema de inferencia difusa.
+		\item[inference\_methods.py] Métodos de inferencia (Mamdani y Larsen).
+		\item[membership\_functions.py] Implementación de funciones de membresía (triangular, trapezoidal, singleton, recta)	 
+	\end{description}}
+	\item{La solución del problema propuesto, localizada en \emph{/src}. A su vez consta de 3 módulos:
+	\begin{description}
+		\item[main.py] Interfaz de usuario que permite evaluar el sistema de inferencia difusa a través del problema propuesto. El usuario provee los parámetros de distancia y ángulo y obtiene la correspondiente dirección.
+		\item[simulation.py] Encargado de realizar las simulaciones.
+		\item[robot\_motion.py] Modelación del problema usando el sistema de inferencia propuesto.
+	\end{description}}
+	\end{enumerate}	
+
+
 \label{end}
 
 
 \end{document}
-
-%===================================================================================
