@@ -27,9 +27,9 @@ Distance.add_term('far', Distance.build_triangular(30, 45, 60))
 Distance.add_term('pretty-far', Distance.build_rect(45, 100, 'asc'))
 
 # uncomment this lines to plot the variables
-Distance.plot()
-Angle.plot()
-Direction.plot()
+# Distance.plot()
+# Angle.plot()
+# Direction.plot()
 
 rule_base = FuzzyRuleBase(state_variables=[Distance, Angle], control_variables=[Direction])
 
